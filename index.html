@@ -62,7 +62,7 @@
           border: none !important;
           width: 210mm;
           height: 297mm;
-          padding: 15mm;
+          padding: 9mm;
           overflow: hidden;
         }
         /* High fidelity text rendering */
@@ -175,58 +175,62 @@
     </div>
 
     <!-- Main Invoice Document -->
-    <div id="invoice-card">
+    <div id="invoice-card" class="">
       <!-- Header Section -->
-      <div class="flex justify-between items-start mb-6">
+      <div class="text-center m-auto mt-[-10px]">
+        <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
+        <p
+          class="text-slate-400 font-bold tracking-widest text-4xl mb-4 uppercase"
+        >
+          Invoice
+        </p>
+      </div>
+      <div class="mb-6 mt-[-110px]">
         <div class="w-3/5">
           <!-- Logo -->
           <div class="relative mb-4 cursor-pointer inline-block">
             <div
               id=""
-              class="w-[120px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 hover:border-blue-400 transition-all"
+              class="w-[90px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400"
             >
               <img src="./cdcicon.png" class="w-full h-full" />
             </div>
           </div>
 
-          <div class="space-y-1 pr-6">
-            <h2 class="font-bold text-3xl text-blue-700 mb-1">CDC Computer</h2>
-            <div class="text-[13px] font-bold text-slate-800">
-              <span class="text-blue-700">លេខទូរស័ព្ទ៖</span> 099 844 884 / 093
-              844 884
+          <div class="pr-6 flex justify-between items-center w-[678px]">
+            <div class="left">
+              <h2 class="font-bold text-3xl text-blue-700 mb-1">
+                CDC Computer
+              </h2>
+              <div class="text-[13px] font-bold text-slate-800">
+                <span class="text-blue-700">លេខទូរស័ព្ទ៖</span> 099 844 884 /
+                093 844 884
+              </div>
+              <div class="text-[12px] text-slate-600 leading-snug">
+                <span class="font-bold text-blue-700">អាសយដ្ឋាន៖</span> ផ្ទះលេខ
+                1203 ផ្លូវជាតិលេខ 2 សង្កាត់ចាក់អង្រែលើ ខណ្ឌមានជ័យ ភ្នំពេញ។
+              </div>
             </div>
-            <div class="text-[12px] text-slate-600 leading-snug">
-              <span class="font-bold text-blue-700">អាសយដ្ឋាន៖</span> ផ្ទះលេខ
-              1203 ផ្លូវជាតិលេខ 2 សង្កាត់ចាក់អង្រែលើ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ។
-            </div>
-          </div>
-        </div>
-
-        <div class="text-right w-2/5">
-          <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
-          <p
-            class="text-slate-400 font-bold tracking-widest text-[10px] mb-4 uppercase"
-          >
-            Invoice
-          </p>
-
-          <div class="space-y-1">
-            <div class="flex items-center justify-end gap-2 text-[13px]">
-              <span class="font-bold text-slate-500">លេខរៀង/No:</span>
-              <input
-                type="text"
-                id="inv-no"
-                class="font-bold text-red-600 input-edit w-20 text-right"
-                value="1000"
-              />
-            </div>
-            <div class="flex items-center justify-end gap-2 text-[13px]">
-              <span class="font-bold text-slate-500">ថ្ងៃខែ/Date:</span>
-              <input
-                type="date"
-                id="date-field"
-                class="font-bold text-slate-800 input-edit w-28 text-right"
-              />
+            <div class="relative left-[30px]">
+              <div class="">
+                <div>
+                  <span class="font-bold text-slate-500">No:</span>
+                  <input
+                    type="text"
+                    id="inv-no"
+                    class="font-bold text-red-600 input-edit w-[50px] text-right"
+                    value="1000"
+                  />
+                </div>
+                <div class="">
+                  <span class="font-bold text-slate-500">Date:</span>
+                  <input
+                    type="date"
+                    id="date-field"
+                    class="font-bold text-slate-800 input-edit w-19 text-center"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -370,7 +374,7 @@
               class="p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
             >
               <h4 class="text-[10px] font-bold text-blue-900 uppercase mb-2">
-                សម្គាល់ និងការធានា / TERMS & WARRANTY
+                សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
               </h4>
               <ul class="text-[9px] text-slate-600 space-y-1 leading-tight">
                 <li>
@@ -388,7 +392,7 @@
                   និងចូលទឹក ។
                 </li>
                 <li>
-                  • ការបាត់បង់ ឬរហែក Seal ធានារបស់ក្រុមហ៊ុន
+                  • ការបាត់បង់ ឬរហែក Seal ធានារបស់ហាង
                   និងបាត់វិកយបត្រមិនមានការធានា។
                 </li>
               </ul>
