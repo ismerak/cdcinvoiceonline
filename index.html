@@ -31,7 +31,7 @@
         width: 210mm;
         min-height: 297mm;
         background: white;
-        padding: 15mm;
+        padding: 10mm;
         margin: 20px auto;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         position: relative;
@@ -45,7 +45,7 @@
           display: block !important;
         }
         @page {
-          size: A4;
+          size: A5;
           margin: 0;
         }
         body {
@@ -211,7 +211,7 @@
                 1203 ផ្លូវជាតិលេខ 2 សង្កាត់ចាក់អង្រែលើ ខណ្ឌមានជ័យ ភ្នំពេញ។
               </div>
             </div>
-            <div class="relative left-[30px]">
+            <div class="relative left-[60px]">
               <div class="">
                 <div>
                   <span class="font-bold text-slate-500">No:</span>
@@ -271,7 +271,7 @@
       </div>
 
       <!-- Items Table -->
-      <div class="flex-grow overflow-hidden">
+      <div class="flex-grow overflow-hidden max-h-[500px]">
         <table class="w-full border-collapse">
           <thead>
             <tr class="table-header text-[11px] font-bold uppercase">
@@ -366,7 +366,7 @@
       </div>
 
       <!-- Footer -->
-      <div class="mt-4">
+      <div class="relative top-[-40px] overflow-hidden">
         <div class="flex justify-between gap-6 items-start mb-6">
           <!-- Warranty Info -->
           <div class="w-[60%]">
@@ -411,7 +411,9 @@
               class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[12px]"
             >
               <span class="font-bold text-slate-500">កក់ / DEPOSIT:</span>
-              <div class="flex items-center gap-1 font-bold text-blue-600">
+              <div
+                class="flex items-center gap-1 font-bold text-blue-600 relative left-[10px]"
+              >
                 <span>$</span>
                 <input
                   type="number"
@@ -434,25 +436,17 @@
         </div>
 
         <!-- Signatures -->
-        <div class="flex justify-between px-10 mb-6">
+        <div class="flex justify-between items-center px-10 mb-6">
           <div class="text-center w-40">
-            <div class="h-16 border-b border-slate-200 mb-2"></div>
             <p class="kh-moul text-[11px] text-blue-900">អតិថិជន</p>
             <p class="font-bold text-[10px]">Costumer</p>
+            <div class="h-1 border-b border-slate-200 mb-2"></div>
           </div>
           <div class="text-center w-40">
-            <div class="h-16 border-b mb-2"></div>
             <p class="kh-moul text-[11px] text-blue-900">អ្នកលក់</p>
             <p class="font-bold text-[10px]">Seller</p>
+            <div class="h-1 border-b mb-2"></div>
           </div>
-        </div>
-
-        <div class="text-center border-t border-slate-100 pt-3">
-          <p
-            class="text-[9px] text-slate-400 font-bold uppercase tracking-widest"
-          >
-            &copy;CDC Computer
-          </p>
         </div>
       </div>
     </div>
