@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="km">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./cdcicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CDC Computer - Invoice System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Moul&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-blue: #1e3a8a;
+        --accent-blue: #2563eb;
+      }
+      body {
+        font-family: "Kantumruy Pro", sans-serif;
+        background-color: #f1f5f9;
+        color: #1e293b;
+        margin: 0;
+        padding: 0;
+      }
+      .kh-moul {
+        font-family: "Moul", serif;
+      }
+
+      /* Layout Optimization for A4 */
+      #invoice-card {
+        width: 210mm;
+        min-height: 297mm;
+        background: white;
+        padding: 10mm;
+        margin: 20px auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        img {
+          display: block !important;
+        }
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          background: white;
+          padding: 0;
+          margin: 0;
+        }
+        .no-print {
+          display: none !important;
+        }
+        #invoice-card {
+          box-shadow: none !important;
+          margin: 0 !important;
+          border: none !important;
+          width: 210mm;
+          height: 297mm;
+          padding: 9mm;
+          overflow: hidden;
+        }
+        /* High fidelity text rendering */
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+      }
+
+      .input-edit {
+        border: 1px solid transparent;
+        background: transparent;
+        transition: all 0.2s;
+        border-radius: 4px;
+        padding: 2px 4px;
+      }
+      .input-edit:hover:not(:disabled) {
+        background: #f8fafc;
+        border-color: #e2e8f0;
+      }
+      .input-edit:focus {
+        background: white;
+        border-color: var(--accent-blue);
+        outline: none;
+      }
+
+      .table-header {
+        background-color: var(--primary-blue) !important;
+        color: white !important;
+      }
+
+      #logo-preview {
+        max-width: 140px;
+        max-height: 80px;
+        object-fit: cover;
+      }
+
+      /* Responsive table content */
+      .item-row input {
+        font-size: 13px;
+      }
+
+      .total-section {
+        background-color: #f8fafc;
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body class="py-10">
+    <!-- Navbar Controls -->
+    <div
+      class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4"
+    >
+      <div
+        class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3 ml-2">
+          <div
+            class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h1 class="text-sm font-bold text-slate-800 uppercase">
+            CDC Computer
+          </h1>
+        </div>
+
+        <div class="flex gap-2 items-center">
+          <div>
+            <a
+              href="index.html"
+              class="hover:bg-red-500 transition-all hover:text-white text-red-600 p-[6px] rounded-[11px] font-bold"
+              >ត្រឡប់ក្រោយ</a
+            >
+          </div>
+          <button
+            onclick="addRow()"
+            class="px-4 py-2 text-xs font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
+          >
+            + ថែមទំនិញ
+          </button>
+          <button
+            onclick="saveAsPDF()"
+            class="px-5 py-2 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 rounded-xl transition-all shadow-lg flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              />
+            </svg>
+            រក្សាទុកជា PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Invoice Document -->
+    <div id="invoice-card" class="">
+      <!-- Header Section -->
+      <div class="text-center m-auto mt-[-10px]">
+        <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
+        <p
+          class="text-slate-400 font-bold tracking-widest text-4xl mb-4 uppercase"
+        >
+          Invoice
+        </p>
+      </div>
+      <div class="mb-6 mt-[-110px]">
+        <div class="w-3/5">
+          <!-- Logo -->
+          <div class="relative mb-4 cursor-pointer inline-block">
+            <div
+              id=""
+              class="w-[90px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400"
+            >
+              <!-- <img src="./cdcicon.png" class="w-full h-full" /> -->
+            </div>
+          </div>
+
+          <div class="pr-6 flex justify-between items-center w-[678px]">
+            <div class="left">
+              <input
+                type="text"
+                class="text-3xl rounded-[5px] text-blue-700 font-bold hover:bg-gray-50 p-[3px] rounded-[6px] w-[250px] outline-none"
+                placeholder="Company Name"
+              />
+              <div class="text-[13px] font-bold text-slate-800">
+                <span class="text-blue-700">លេខទូរស័ព្ទ៖</span>
+                <input
+                  type="text"
+                  class="outline-none hover:bg-gray-50 p-[3px] rounded-[6px]"
+                  placeholder="input phone number"
+                />
+              </div>
+              <div class="text-[12px] text-slate-600 leading-snug">
+                <span class="font-bold text-blue-700">អាសយដ្ឋាន៖</span
+                ><input
+                  type="text"
+                  class="t p-[3px] outline-none hover:bg-gray-50 rounded-[6px] w-[350px]"
+                  placeholder="input address"
+                />
+              </div>
+            </div>
+            <div class="relative left-[60px]">
+              <div class="">
+                <div>
+                  <span class="font-bold text-slate-500">No:</span>
+                  <input
+                    type="text"
+                    id="inv-no"
+                    class="font-bold text-red-600 input-edit w-[50px] text-right"
+                    value="1000"
+                  />
+                </div>
+                <div class="">
+                  <span class="font-bold text-slate-500">Date:</span>
+                  <input
+                    type="date"
+                    id="date-field"
+                    class="font-bold text-slate-800 input-edit w-19 text-center"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Info -->
+      <div class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50">
+        <div class="">
+          <h2 class="font-bold">Costumer/Company</h2>
+          <div class="flex items-center border-b border-blue-200 pb-1">
+            <span class="text-[11px] text-blue-600 w-24 font-bold"
+              >អតិថិជន/Name:</span
+            >
+            <input
+              type="text"
+              class="text-sm font-bold text-slate-800 input-edit w-full"
+            />
+          </div>
+          <div class="flex items-center border-b border-blue-200 pb-1">
+            <span class="text-[11px] text-blue-600 w-24 font-bold"
+              >ទូរស័ព្ទ/Tel:</span
+            >
+            <input
+              type="text"
+              class="text-sm text-slate-700 input-edit w-full"
+            />
+          </div>
+          <div class="flex items-center border-b border-blue-200 pb-1">
+            <span class="text-[11px] text-blue-600 w-24 font-bold"
+              >ទីតាំង/Address:</span
+            >
+            <input
+              type="text"
+              class="text-sm text-slate-700 input-edit w-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="flex-grow overflow-hidden max-h-[500px]">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="table-header text-[11px] font-bold uppercase">
+              <th class="py-3 px-2 text-center border-r border-white/20 w-10">
+                <span>ល.រ</span>
+                <span>No</span>
+              </th>
+              <th class="py-2 px-3 text-center border-r border-white/20">
+                <span>រាយមុខទំនិញ</span><br />
+                <span>Name of Goods</span>
+              </th>
+              <th class="py-3 px-2 text-center border-r border-white/20 w-24">
+                <span>ការធានា</span><br />
+                <span>Warranty</span>
+              </th>
+              <th class="py-3 px-2 text-center border-r border-white/20 w-16">
+                <span>ចំនួន</span><br />
+                <span>Quantity</span>
+              </th>
+              <th class="py-3 px-3 text-center border-r border-white/20 w-28">
+                <span>តម្លៃរាយ</span><br />
+                <span>Price</span>
+              </th>
+              <th class="py-3 px-3 text-right w-28">
+                <span>តម្លៃសរុប</span><br />
+                <span>Total</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="item-list">
+            <tr class="item-row border-b border-slate-200">
+              <td class="py-2 px-1 text-center text-slate-400 text-xs">1</td>
+              <td class="py-2 px-2">
+                <div class="flex items-center gap-1">
+                  <input
+                    type="text"
+                    class="input-edit text-sm w-full font-semibold text-slate-700"
+                    placeholder="ឈ្មោះទំនិញ"
+                  />
+                  <button
+                    onclick="removeRow(this)"
+                    class="no-print text-red-300 hover:text-red-500 transition"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+              <td class="py-2 px-1">
+                <input
+                  type="text"
+                  class="input-edit text-[11px] w-full text-center text-blue-600 font-bold"
+                  value="1 Year"
+                />
+              </td>
+              <td class="py-2 px-1">
+                <input
+                  type="number"
+                  oninput="calculate()"
+                  class="qty text-center input-edit text-sm font-bold w-full"
+                  value="1"
+                />
+              </td>
+              <td class="py-2 px-1">
+                <input
+                  type="number"
+                  oninput="calculate()"
+                  class="price text-right input-edit text-sm font-bold w-full text-blue-600"
+                  value="0.00"
+                />
+              </td>
+              <td
+                class="py-2 px-3 text-right text-sm font-extrabold text-slate-800 total-row"
+              >
+                $0.00
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div class="relative top-[-40px] overflow-hidden">
+        <div class="flex justify-between gap-6 items-start mb-6">
+          <!-- Warranty Info -->
+          <div class="w-[60%]">
+            <div
+              class="p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
+            >
+              <h4 class="text-[10px] font-bold text-blue-900 uppercase mb-2">
+                សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
+              </h4>
+              <ul class="text-[9px] text-slate-600 space-y-1 leading-tight">
+                <li>
+                  •
+                  រាល់ទំនិញដែលអតិថិជនទិញរួចមិនអាចប្តូរយកសាច់ប្រាក់ឬដូរវិញបានឡើយ
+                  / Goods are sold no Refund and Return.
+                </li>
+                <li>
+                  • សូមអតិថិជនត្រួតពិនិត្យទំនិញអោយបានច្បាស់លាស់
+                  មុនពេលយកទំនិញចេញពីហាង / Please check the goods carefully
+                  before leaving the store.
+                </li>
+                <li class="font-bold text-slate-800">
+                  • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
+                  និងចូលទឹក ។
+                </li>
+                <li>
+                  • ការបាត់បង់ ឬរហែក Seal ធានារបស់ហាង
+                  និងបាត់វិកយបត្រមិនមានការធានា។
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Calculation -->
+          <div class="w-[35%] space-y-2">
+            <div
+              class="flex justify-between px-3 py-1.5 border-b border-slate-100 bg-blue-700 text-[17px] rounded-xl"
+            >
+              <span class="font-bold text-white">សរុប / TOTAL:</span>
+              <span id="subtotal" class="font-extrabold text-white">$0.00</span>
+            </div>
+            <div
+              class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[12px]"
+            >
+              <span class="font-bold text-slate-500">កក់ / DEPOSIT:</span>
+              <div
+                class="flex items-center gap-1 font-bold text-blue-600 relative left-[10px]"
+              >
+                <span>$</span>
+                <input
+                  type="number"
+                  id="deposit"
+                  oninput="calculate()"
+                  class="text-right input-edit font-extrabold w-16"
+                  value="0.00"
+                />
+              </div>
+            </div>
+            <div
+              class="flex justify-between items-center px-3 py-3 text-slate-500"
+            >
+              <span class="text-[11px] font-bold uppercase"
+                >នៅខ្វះ / BALANCE</span
+              >
+              <span id="balance" class="text-[12px] font-extrabold">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signatures -->
+        <div class="flex justify-between items-center px-10 mb-6">
+          <div class="text-center w-40">
+            <p class="kh-moul text-[11px] text-blue-900">អតិថិជន</p>
+            <p class="font-bold text-[10px]">Costumer</p>
+            <div class="h-1 border-b border-slate-200 mb-2"></div>
+          </div>
+          <div class="text-center w-40">
+            <p class="kh-moul text-[11px] text-blue-900">អ្នកលក់</p>
+            <p class="font-bold text-[10px]">Seller</p>
+            <div class="h-1 border-b mb-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const now = new Date();
+      document.getElementById("date-field").value =
+        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      function addRow() {
+        const tbody = document.getElementById("item-list");
+        const rowCount = tbody.rows.length + 1;
+        const row = document.createElement("tr");
+        row.className = "item-row border-b border-slate-200";
+        row.innerHTML = `
+                <td class="py-2 px-1 text-center text-slate-400 text-xs">${rowCount}</td>
+                <td class="py-2 px-2">
+                    <div class="flex items-center gap-1">
+                        <input type="text" class="input-edit text-sm w-full font-semibold text-slate-700" placeholder="ឈ្មោះទំនិញ">
+                        <button onclick="removeRow(this)" class="no-print text-red-300 hover:text-red-500 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </td>
+                <td class="py-2 px-1"><input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold" value="1 Year"></td>
+                <td class="py-2 px-1"><input type="number" oninput="calculate()" class="qty text-center input-edit text-sm font-bold w-full" value="1"></td>
+                <td class="py-2 px-1"><input type="number" oninput="calculate()" class="price text-right input-edit text-sm font-bold w-full text-blue-600" value="0.00"></td>
+                <td class="py-2 px-3 text-right text-sm font-extrabold text-slate-800 total-row">$0.00</td>
+            `;
+        tbody.appendChild(row);
+        calculate();
+      }
+
+      function removeRow(btn) {
+        btn.closest("tr").remove();
+        document
+          .querySelectorAll("#item-list tr")
+          .forEach((tr, i) => (tr.cells[0].innerText = i + 1));
+        calculate();
+      }
+
+      function calculate() {
+        let subtotal = 0;
+        document.querySelectorAll("#item-list tr").forEach((row) => {
+          const qty = parseFloat(row.querySelector(".qty").value) || 0;
+          const price = parseFloat(row.querySelector(".price").value) || 0;
+          const total = qty * price;
+          subtotal += total;
+          row.querySelector(".total-row").innerText = "$" + total.toFixed(2);
+        });
+        const deposit =
+          parseFloat(document.getElementById("deposit").value) || 0;
+        document.getElementById("subtotal").innerText =
+          "$" + subtotal.toFixed(2);
+        document.getElementById("balance").innerText =
+          "$" + (subtotal - deposit).toFixed(2);
+      }
+
+      function saveAsPDF() {
+        // Use browser native print for 100% font clarity and A4 compliance
+        window.print();
+        // Increment invoice number after printing
+        const inv = document.getElementById("inv-no");
+        inv.value = parseInt(inv.value) + 1;
+      }
+
+      calculate();
+    </script>
+  </body>
+</html>
