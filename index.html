@@ -93,7 +93,6 @@
         color: white !important;
       }
 
-      /* Responsive table content */
       .item-row input {
         font-size: 13px;
       }
@@ -109,7 +108,7 @@
       >
         <div class="flex items-center gap-2">
           <a
-            href="invoice.html"
+            href="javascript:location.reload()"
             class="text-blue-700 font-bold p-2 hover:bg-blue-50 rounded-xl transition-all"
             >វិក្កយបត្រថ្មី</a
           >
@@ -129,7 +128,7 @@
 
         <div class="flex gap-2 items-center">
           <button
-            onclick="addNineRows()"
+            onclick="addRows(6)"
             class="text-blue-700 text-sm font-bold p-1 py-2 px-3 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
           >
             បន្ថែម 6 ជួរ
@@ -139,6 +138,12 @@
             class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
           >
             ថែម 1 ជួរ
+          </button>
+          <button
+            onclick="toggleDateInput()"
+            class="px-3 py-2 text-sm font-bold text-purple-700 hover:bg-purple-50 rounded-xl transition-all border border-purple-100"
+          >
+            ប្តូរទម្រង់ថ្ងៃ (Date/Text)
           </button>
           <button
             onclick="saveAsPDF()"
@@ -207,12 +212,12 @@
               </div>
             </div>
             <div class="relative left-[60px]">
-              <div class="relative top-[28px]">
+              <div id="date-container" class="relative top-[28px]">
                 <span class="font-bold text-slate-500">Date:</span>
                 <input
                   type="date"
                   id="date-field"
-                  class="font-bold text-slate-800 input-edit w-32 text-center"
+                  class="font-bold text-slate-800 input-edit w-40 text-center"
                 />
               </div>
             </div>
@@ -277,16 +282,13 @@
               <th class="py-3 px-3 text-right w-32">តម្លៃសរុប<br />Total</th>
             </tr>
           </thead>
-          <tbody id="item-list">
-            <!-- Rows injected by JS -->
-          </tbody>
+          <tbody id="item-list"></tbody>
         </table>
       </div>
 
       <!-- Footer Section -->
       <div class="mt-6">
         <div class="flex justify-between gap-6 items-start mb-10">
-          <!-- Terms -->
           <div
             class="w-[60%] p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
           >
@@ -303,14 +305,13 @@
                 check before leaving.
               </li>
               <li class="font-bold text-slate-800">
-                • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក និងចូលទឹក
-                ។
+                • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
+                និងចូលទឹក។
               </li>
               <li>• ការបាត់បង់ Seal ធានា ឬ បាត់វិកយបត្រមិនមានការធានាឡើយ។</li>
             </ul>
           </div>
 
-          <!-- Calculation -->
           <div class="w-[35%] space-y-2">
             <div
               class="flex justify-between px-3 py-2 bg-blue-700 text-white rounded-xl items-center"
@@ -344,7 +345,6 @@
           </div>
         </div>
 
-        <!-- Signatures -->
         <div class="flex justify-between items-center px-10 mb-4">
           <div class="text-center w-40">
             <p class="kh-moul text-[11px] text-blue-900">អតិថិជន</p>
@@ -361,11 +361,50 @@
     </div>
 
     <script>
-      // Initialize Date
-      const now = new Date();
-      document.getElementById("date-field").value = now
-        .toISOString()
-        .split("T")[0];
+      let isTextInput = false;
+
+      // Toggle between date input and text input
+      function toggleDateInput() {
+        const container = document.getElementById("date-container");
+        const oldField = document.getElementById("date-field");
+        const currentValue = oldField.value;
+
+        isTextInput = !isTextInput;
+
+        if (isTextInput) {
+          // Change to text input
+          container.innerHTML = `
+            <span class="font-bold text-slate-500">Date:</span>
+            <input
+              type="text"
+              id="date-field"
+              placeholder=""
+              class="font-bold text-slate-800 input-edit w-[160px] text-center"
+            />
+          `;
+        } else {
+          // Change back to date input
+          container.innerHTML = `
+            <span class="font-bold text-slate-500">Date:</span>
+            <input
+              type="date"
+              id="date-field"
+              class="font-bold text-slate-800 input-edit w-40 text-center"
+            />
+          `;
+          // Reset to current date as default when switching back
+          const now = new Date().toISOString().split("T")[0];
+          document.getElementById("date-field").value = now;
+        }
+      }
+
+      // Initialize default date
+      function setInitialDate() {
+        const dateField = document.getElementById("date-field");
+        if (dateField && dateField.type === "date") {
+          dateField.value = new Date().toISOString().split("T")[0];
+        }
+      }
 
       function addRow() {
         const tbody = document.getElementById("item-list");
@@ -375,7 +414,7 @@
         row.innerHTML = `
           <td class="py-2 px-1 text-center text-slate-400 text-xs border">${rowCount}</td>
           <td class="py-2 px-2 border">
-            <input type="text" class="input-edit text-sm w-full font-semibold text-slate-700" placeholder="">
+            <input type="text" class="input-edit text-sm w-full font-semibold text-slate-700">
           </td>
           <td class="py-2 px-1 border">
             <input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold">
@@ -396,26 +435,22 @@
         tbody.appendChild(row);
       }
 
-      // Update individual row total when Qty or Price changes, but allow manual edit
       function updateRowTotal(input) {
         const row = input.closest("tr");
         const qty = parseFloat(row.querySelector(".qty").value) || 0;
         const price = parseFloat(row.querySelector(".price").value) || 0;
         const totalInput = row.querySelector(".total-row-input");
-
         if (qty > 0 && price > 0) {
           totalInput.value = (qty * price).toFixed(2);
         }
         calculateGrandTotal();
       }
 
-      // Calculate final sums
       function calculateGrandTotal() {
         let subtotal = 0;
         document.querySelectorAll(".total-row-input").forEach((input) => {
           subtotal += parseFloat(input.value) || 0;
         });
-
         const deposit =
           parseFloat(document.getElementById("deposit").value) || 0;
         document.getElementById("subtotal").innerText =
@@ -445,19 +480,17 @@
         }
       }
 
-      function addNineRows() {
-        for (let i = 0; i < 6; i++) {
-          addRow();
-        }
+      function addRows(count) {
+        for (let i = 0; i < count; i++) addRow();
       }
 
       function saveAsPDF() {
         window.print();
       }
 
-      // Initial Rows
       window.onload = () => {
-        for (let i = 0; i < 1; i++) addRow();
+        setInitialDate();
+        addRows(1);
       };
     </script>
   </body>
