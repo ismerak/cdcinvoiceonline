@@ -114,48 +114,51 @@
   <body class="py-10">
     <!-- Navbar Controls -->
     <div
-      class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4"
+      class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-[900px] px-4"
     >
       <div
         class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between"
       >
-        <div class="flex items-center gap-3 ml-2">
-          <div
-            class="w-10 h-10 bg-blue-700 rounded-lg flex items-center justify-center text-white"
+        <div class="flex items-center">
+          <button
+            onclick="removeLastRow()"
+            class="text-orange-600 font-bold p-2 hover:bg-orange-50 rounded-xl transition-all"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-          </div>
-          <h1 class="text-sm font-bold text-slate-800 uppercase">
-            CDC Computer
-          </h1>
+            លុបជួរចុងក្រោយ
+          </button>
+          <button
+            onclick="clearAllRows()"
+            class="text-red-700 font-bold p-2 hover:bg-red-50 rounded-xl transition-all"
+          >
+            លុបទាំងអស់
+          </button>
         </div>
 
         <div class="flex gap-2 items-center">
           <div>
             <a
               href="index.html"
-              class="hover:bg-red-50 transition-all text-red-700 p-[6px] rounded-[11px] font-bold"
+              class="hover:bg-red-50 transition-all text-red-700 p-[5px] py-3 rounded-[15px] font-bold"
               >ត្រឡប់ក្រោយ</a
             >
           </div>
           <button
+            onclick="addSixRows()"
+            class="text-blue-700 text-sm font-bold p-1 py-2 px-3 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
+          >
+            បន្ថែម 6 ជួរ
+          </button>
+          <button
             onclick="addRow()"
-            class="px-4 py-2 text-xs font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
+            class="px-4 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
           >
             + ថែមទំនិញ
+          </button>
+          <button
+            onclick="toggleDateInput()"
+            class="px-3 py-2 text-sm font-bold text-purple-700 hover:bg-purple-50 rounded-xl transition-all border border-purple-100"
+          >
+            ប្តូរទម្រង់ថ្ងៃ (Date/Text)
           </button>
           <button
             onclick="saveAsPDF()"
@@ -233,7 +236,7 @@
             </div>
             <div class="relative left-[60px]">
               <div class="">
-                <div class="top-[30px] relative">
+                <div id="date-container" class="top-[30px] relative">
                   <span class="font-bold text-slate-500">Date:</span>
                   <input
                     type="date"
@@ -314,62 +317,51 @@
           </thead>
           <tbody id="item-list">
             <tr class="item-row border-b border-slate-200">
-              <td class="py-2 px-1 text-center text-slate-400 text-xs">1</td>
-              <td class="py-2 px-2">
+              <td class="py-2 px-1 text-center text-slate-400 text-xs border">
+                1
+              </td>
+              <td class="py-2 px-2 border">
                 <div class="flex items-center gap-1">
                   <input
                     type="text"
                     class="input-edit text-sm w-full font-semibold text-slate-700"
-                    placeholder="ឈ្មោះទំនិញ"
+                    placeholder=""
                   />
-                  <button
-                    onclick="removeRow(this)"
-                    class="no-print text-red-300 hover:text-red-500 transition"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-3 w-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </button>
                 </div>
               </td>
-              <td class="py-2 px-1">
+              <td class="py-2 px-1 border">
                 <input
                   type="text"
                   class="input-edit text-[11px] w-full text-center text-blue-600 font-bold"
-                  value="1 Year"
+                  value=""
                 />
               </td>
-              <td class="py-2 px-1">
+              <td class="py-2 px-1 border">
                 <input
                   type="number"
-                  oninput="calculate()"
+                  oninput="calculateFromPrice(this)"
                   class="qty text-center input-edit text-sm font-bold w-full"
-                  value="1"
+                  value=""
                 />
               </td>
-              <td class="py-2 px-1">
+              <td class="py-2 px-1 border">
                 <input
                   type="number"
-                  oninput="calculate()"
+                  oninput="calculateFromPrice(this)"
                   class="price text-right input-edit text-sm font-bold w-full text-blue-600"
-                  value="0.00"
+                  value=""
                 />
               </td>
-              <td
-                class="py-2 px-3 text-right text-sm font-extrabold text-slate-800 total-row"
-              >
-                $0.00
+              <td class="py-2 px-1 border">
+                <div class="flex items-center">
+                  <span class="ml-1 text-slate-500 text-sm">$</span>
+                  <input
+                    type="number"
+                    oninput="calculateGrandTotalOnly()"
+                    class="total-row text-right input-edit text-sm font-extrabold text-slate-800 w-full"
+                    value=""
+                  />
+                </div>
               </td>
             </tr>
           </tbody>
@@ -415,23 +407,26 @@
             <div
               class="flex justify-between px-3 py-1.5 border-b border-slate-100 bg-blue-700 text-[17px] rounded-xl"
             >
-              <span class="font-bold text-white">សរុប / TOTAL:</span>
-              <span id="subtotal" class="font-extrabold text-white">$0.00</span>
+              <span class="font-bold text-white">សរុប / TOTAL :</span>
+              <input
+                type="text"
+                id="subtotal"
+                class="w-20 bg-transparent text-white outline-none border-none px-1 font-bold"
+              />
             </div>
             <div
               class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[12px]"
             >
-              <span class="font-bold text-slate-500">កក់ / DEPOSIT:</span>
+              <span class="font-bold text-slate-500">កក់ / DEPOSIT :</span>
               <div
                 class="flex items-center gap-1 font-bold text-blue-600 relative left-[10px]"
               >
-                <span>$</span>
                 <input
-                  type="number"
+                  type="text"
                   id="deposit"
-                  oninput="calculate()"
+                  oninput="calculateGrandTotalOnly()"
                   class="text-right input-edit font-extrabold w-16"
-                  value="0.00"
+                  value=""
                 />
               </div>
             </div>
@@ -439,9 +434,14 @@
               class="flex justify-between items-center px-3 py-3 text-slate-500"
             >
               <span class="text-[11px] font-bold uppercase"
-                >នៅខ្វះ / BALANCE</span
-              >
-              <span id="balance" class="text-[12px] font-extrabold">$0.00</span>
+                >នៅខ្វះ / BALANCE :
+              </span>
+              <input
+                oninput="calculateGrandTotal()"
+                type="text"
+                id="balance"
+                class="w-20 outline-none border-none font-bold text-gray-800"
+              />
             </div>
           </div>
         </div>
@@ -466,66 +466,150 @@
       const now = new Date();
       document.getElementById("date-field").value =
         `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      let isTextInput = false;
+
+      // Toggle between date input and text input
+      function toggleDateInput() {
+        const container = document.getElementById("date-container");
+        const oldField = document.getElementById("date-field");
+        const currentValue = oldField.value;
+
+        isTextInput = !isTextInput;
+
+        if (isTextInput) {
+          // Change to text input
+          container.innerHTML = `
+            <span class="font-bold text-slate-500">Date:</span>
+            <input
+              type="text"
+              id="date-field"
+              placeholder=""
+              class="font-bold text-slate-800 input-edit w-[160px] text-center"
+            />
+          `;
+        } else {
+          // Change back to date input
+          container.innerHTML = `
+            <span class="font-bold text-slate-500">Date:</span>
+            <input
+              type="date"
+              id="date-field"
+              class="font-bold text-slate-800 input-edit w-40 text-center"
+            />
+          `;
+          // Reset to current date as default when switching back
+          const now = new Date().toISOString().split("T")[0];
+          document.getElementById("date-field").value = now;
+        }
+      }
+
+      // Initialize default date
+      function setInitialDate() {
+        const dateField = document.getElementById("date-field");
+        if (dateField && dateField.type === "date") {
+          dateField.value = new Date().toISOString().split("T")[0];
+        }
+      }
+
+      // បន្ថែម 1 ជួរ
       function addRow() {
         const tbody = document.getElementById("item-list");
         const rowCount = tbody.rows.length + 1;
         const row = document.createElement("tr");
         row.className = "item-row border-b border-slate-200";
         row.innerHTML = `
-                <td class="py-2 px-1 text-center text-slate-400 text-xs">${rowCount}</td>
-                <td class="py-2 px-2">
-                    <div class="flex items-center gap-1">
-                        <input type="text" class="input-edit text-sm w-full font-semibold text-slate-700" placeholder="ឈ្មោះទំនិញ">
-                        <button onclick="removeRow(this)" class="no-print text-red-300 hover:text-red-500 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                    </div>
-                </td>
-                <td class="py-2 px-1"><input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold" value="1 Year"></td>
-                <td class="py-2 px-1"><input type="number" oninput="calculate()" class="qty text-center input-edit text-sm font-bold w-full" value="1"></td>
-                <td class="py-2 px-1"><input type="number" oninput="calculate()" class="price text-right input-edit text-sm font-bold w-full text-blue-600" value="0.00"></td>
-                <td class="py-2 px-3 text-right text-sm font-extrabold text-slate-800 total-row">$0.00</td>
-            `;
+        <td class="py-2 px-1 text-center text-slate-400 text-xs border">${rowCount}</td>
+        <td class="py-2 px-2 border">
+            <input type="text" class="input-edit text-sm w-full font-semibold text-slate-700">
+        </td>
+        <td class="py-2 px-1 border">
+            <input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold">
+        </td>
+        <td class="py-2 px-1 border">
+            <input type="number" oninput="calculateFromPrice(this)" class="qty text-center input-edit text-sm font-bold w-full">
+        </td>
+        <td class="py-2 px-1 border">
+            <input type="number" oninput="calculateFromPrice(this)" class="price text-right input-edit text-sm font-bold w-full text-blue-600">
+        </td>
+        <td class="py-2 px-1 border">
+            <div class="flex items-center">
+                <span class="ml-1 text-slate-500 text-sm">$</span>
+                <input type="number" oninput="calculateGrandTotalOnly()" class="total-row text-right input-edit text-sm font-extrabold text-slate-800 w-full" value="">
+            </div>
+        </td>
+    `;
         tbody.appendChild(row);
-        calculate();
+        calculateGrandTotalOnly();
       }
 
-      function removeRow(btn) {
-        btn.closest("tr").remove();
-        document
-          .querySelectorAll("#item-list tr")
-          .forEach((tr, i) => (tr.cells[0].innerText = i + 1));
-        calculate();
+      // បន្ថែម 6 ជួរ
+      function addSixRows() {
+        for (let i = 0; i < 6; i++) {
+          addRow();
+        }
       }
 
-      function calculate() {
+      // លុបជួរចុងក្រោយ
+      function removeLastRow() {
+        const tbody = document.getElementById("item-list");
+        if (tbody.rows.length > 0) {
+          tbody.deleteRow(tbody.rows.length - 1);
+          calculateGrandTotalOnly();
+        }
+      }
+
+      // លុបទាំងអស់
+      function clearAllRows() {
+        if (confirm("តើអ្នកប្រាកដថាចង់លុបមុខទំនិញទាំងអស់មែនទេ?")) {
+          document.getElementById("item-list").innerHTML = "";
+          calculateGrandTotalOnly();
+        }
+      }
+
+      // គណនា Total ក្នុងជួរ (នៅពេលវាយ Qty ឬ Price)
+      function calculateFromPrice(element) {
+        const row = element.closest("tr");
+        const qty = parseFloat(row.querySelector(".qty").value) || 0;
+        const price = parseFloat(row.querySelector(".price").value) || 0;
+        const totalInput = row.querySelector(".total-row");
+
+        const total = qty * price;
+        totalInput.value = total.toFixed(2);
+
+        calculateGrandTotalOnly();
+      }
+
+      // គណនាផលបូកសរុបខាងក្រោម
+      function calculateGrandTotalOnly() {
         let subtotal = 0;
-        document.querySelectorAll("#item-list tr").forEach((row) => {
-          const qty = parseFloat(row.querySelector(".qty").value) || 0;
-          const price = parseFloat(row.querySelector(".price").value) || 0;
-          const total = qty * price;
-          subtotal += total;
-          row.querySelector(".total-row").innerText = "$" + total.toFixed(2);
+
+        // គណនាសរុបរួម
+        document.querySelectorAll(".total-row").forEach((input) => {
+          subtotal += parseFloat(input.value) || 0;
         });
-        const deposit =
-          parseFloat(document.getElementById("deposit").value) || 0;
-        document.getElementById("subtotal").innerText =
-          "$" + subtotal.toFixed(2);
-        document.getElementById("balance").innerText =
-          "$" + (subtotal - deposit).toFixed(2);
+
+        const depositInput = document.getElementById("deposit");
+        const deposit = parseFloat(depositInput.value) || 0;
+        const balance = subtotal - deposit;
+
+        // បង្ហាញ Subtotal: បើស្មើ ០ ឱ្យនៅទទេ បើលើសពី ០ ថែមសញ្ញា $
+        document.getElementById("subtotal").value =
+          subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
+
+        // បង្ហាញ Balance: បើស្មើ ០ ឱ្យនៅទទេ
+        document.getElementById("balance").value =
+          balance !== 0 ? "$" + balance.toFixed(2) : "";
+
+        // បើអ្នកចង់ឱ្យ Deposit នៅទទេដែរពេលវាយលេខ ០ (Optional)
+        if (deposit === 0) depositInput.value = "";
       }
 
       function saveAsPDF() {
-        // Use browser native print for 100% font clarity and A4 compliance
         window.print();
-        // Increment invoice number after printing
-        const inv = document.getElementById("inv-no");
-        inv.value = parseInt(inv.value) + 1;
       }
 
-      calculate();
+      // ហៅការគណនាដំបូង
+      calculateGrandTotalOnly();
     </script>
   </body>
 </html>
