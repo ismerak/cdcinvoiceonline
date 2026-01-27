@@ -69,6 +69,11 @@
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
         }
+        /* Hide scrollbars in print */
+        textarea {
+            overflow: hidden !important;
+            resize: none !important;
+        }
       }
 
       .input-edit {
@@ -93,8 +98,17 @@
         color: white !important;
       }
 
-      .item-row input {
+      .item-row input, .item-row textarea {
         font-size: 13px;
+      }
+
+      /* Textarea specific styling */
+      .auto-textarea {
+        resize: none;
+        overflow: hidden;
+        min-height: 24px;
+        display: block;
+        line-height: 1.4;
       }
     </style>
   </head>
@@ -274,13 +288,11 @@
                 ការធានា<br />Warranty
               </th>
               <th
-                oninput="updateRowTotal(this)"
                 class="py-3 px-2 text-center border-r border-white/20 w-16"
               >
                 ចំនួន<br />Qty
               </th>
               <th
-                oninput="updateRowTotal(this)"
                 class="py-3 px-3 text-center border-r border-white/20 w-28"
               >
                 តម្លៃរាយ<br />Unit Price
@@ -379,6 +391,12 @@
     <script>
       let isTextInput = false;
 
+      // Auto-resize textarea function
+      function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+      }
+
       // Toggle between date input and text input
       function toggleDateInput() {
         const container = document.getElementById("date-container");
@@ -430,10 +448,18 @@
         row.innerHTML = `
           <td class="py-2 px-1 text-center text-slate-400 text-xs border">${rowCount}</td>
           <td class="py-2 px-2 border">
-            <input type="text" class="input-edit text-sm w-full font-semibold text-slate-700">
+            <textarea 
+                rows="1"
+                oninput="autoResize(this)"
+                class="auto-textarea input-edit text-sm w-full font-semibold text-slate-700"
+            ></textarea>
           </td>
           <td class="py-2 px-1 border">
-            <input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold">
+            <textarea 
+                rows="1"
+                oninput="autoResize(this)"
+                class="auto-textarea input-edit text-[11px] w-full text-center text-blue-600 font-bold"
+            ></textarea>
           </td>
           <td class="py-2 px-1 border">
             <input type="number" oninput="updateRowTotal(this)" class="qty text-center input-edit text-sm font-bold w-full" step="any">
@@ -486,7 +512,7 @@
         if (deposit === 0) depositInput.value = "";
       }
 
-      function calculate() {
+      function calculateGrandTotalOnly() {
         calculateGrandTotal();
       }
 
@@ -502,7 +528,7 @@
         if (confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")) {
           document.getElementById("item-list").innerHTML = "";
           addRow();
-          document.getElementById("deposit").value = "0.00";
+          document.getElementById("deposit").value = "";
           calculateGrandTotal();
         }
       }
