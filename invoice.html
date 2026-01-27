@@ -65,7 +65,6 @@
           padding: 9mm;
           overflow: hidden;
         }
-        /* High fidelity text rendering */
         * {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
@@ -94,20 +93,10 @@
         color: white !important;
       }
 
-      #logo-preview {
-        max-width: 140px;
-        max-height: 80px;
-        object-fit: cover;
-      }
-
-      /* Responsive table content */
-      .item-row input {
-        font-size: 13px;
-      }
-
-      .total-section {
-        background-color: #f8fafc;
-        border-radius: 12px;
+      /* Alignment to top for all cells - នេះជាចំណុចគន្លឹះដែលអ្នកចង់បាន */
+      .item-row td {
+        vertical-align: top;
+        padding-top: 8px;
       }
 
       .input-multiline {
@@ -120,11 +109,6 @@
         display: block;
         min-height: 1.5em;
         line-height: 1.5;
-      }
-
-      .table-header {
-        background-color: var(--primary-blue) !important;
-        color: white !important;
       }
     </style>
   </head>
@@ -202,8 +186,7 @@
     </div>
 
     <!-- Main Invoice Document -->
-    <div id="invoice-card" class="">
-      <!-- Header Section -->
+    <div id="invoice-card">
       <div class="text-center m-auto mt-[-10px]">
         <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
         <p
@@ -212,6 +195,7 @@
           Invoice
         </p>
       </div>
+
       <div class="mb-6 mt-[-110px]">
         <div class="w-3/5">
           <!-- Logo Container -->
@@ -266,109 +250,91 @@
 
       <!-- Customer Info -->
       <div class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50">
-        <div class="">
-          <h2 class="font-bold">Costumer/Company</h2>
-          <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[11px] text-blue-600 w-24 font-bold"
-              >អតិថិជន/Name:</span
-            >
-            <input
-              type="text"
-              class="text-sm font-bold text-slate-800 input-edit w-full"
-            />
-          </div>
-          <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[11px] text-blue-600 w-24 font-bold"
-              >ទូរស័ព្ទ/Tel:</span
-            >
-            <input
-              type="text"
-              class="text-sm text-slate-700 input-edit w-full"
-            />
-          </div>
-          <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[11px] text-blue-600 w-24 font-bold"
-              >ទីតាំង/Address:</span
-            >
-            <input
-              type="text"
-              class="text-sm text-slate-700 input-edit w-full"
-            />
-          </div>
+        <h2 class="font-bold mb-1">Customer/Company</h2>
+        <div class="flex items-center border-b border-blue-200 pb-1">
+          <span class="text-[11px] text-blue-600 w-28 font-bold"
+            >អតិថិជន/Name:</span
+          >
+          <input
+            type="text"
+            class="text-sm font-bold text-slate-800 input-edit w-full"
+          />
+        </div>
+        <div class="flex items-center border-b border-blue-200 pb-1">
+          <span class="text-[11px] text-blue-600 w-28 font-bold"
+            >ទូរស័ព្ទ/Tel:</span
+          >
+          <input type="text" class="text-sm text-slate-700 input-edit w-full" />
+        </div>
+        <div class="flex items-center border-b border-blue-200 pb-1">
+          <span class="text-[11px] text-blue-600 w-28 font-bold"
+            >ទីតាំង/Address:</span
+          >
+          <input type="text" class="text-sm text-slate-700 input-edit w-full" />
         </div>
       </div>
 
       <!-- Items Table -->
       <div class="flex-grow overflow-hidden">
-        <table class="w-full border-collapse">
+        <table class="w-full border-collapse border border-slate-200">
           <thead>
             <tr class="table-header text-[11px] font-bold uppercase">
-              <th class="py-3 px-2 text-center border-r border-white/20 w-10">
-                <span>ល.រ</span><br />
-                <span>No</span>
+              <th class="py-3 px-2 text-center border-r border-white/20 w-12">
+                ល.រ<br />No
               </th>
               <th class="py-2 px-3 text-center border-r border-white/20">
-                <span>រាយមុខទំនិញ</span><br />
-                <span>Name of Goods</span>
+                រាយមុខទំនិញ<br />Name of Goods
               </th>
-              <th class="py-3 px-2 text-center border-r border-white/20 w-24">
-                <span>ការធានា</span><br />
-                <span>Warranty</span>
+              <th class="py-3 px-2 text-center border-r border-white/20 w-28">
+                ការធានា<br />Warranty
               </th>
-              <th class="py-3 px-2 text-center border-r border-white/20 w-16">
-                <span>ចំនួន</span><br />
-                <span>Quantity</span>
+              <th class="py-3 px-2 text-center border-r border-white/20 w-20">
+                ចំនួន<br />Qty
               </th>
-              <th class="py-3 px-3 text-center border-r border-white/20 w-28">
-                <span>តម្លៃរាយ</span><br />
-                <span>Price</span>
+              <th class="py-3 px-3 text-center border-r border-white/20 w-32">
+                តម្លៃរាយ<br />Price
               </th>
-              <th class="py-3 px-3 text-right w-28">
-                <span>តម្លៃសរុប</span><br />
-                <span>Total</span>
-              </th>
+              <th class="py-3 px-3 text-right w-32">តម្លៃសរុប<br />Total</th>
             </tr>
           </thead>
           <tbody id="item-list">
+            <!-- First Row -->
             <tr class="item-row border-b border-slate-200">
-              <td class="py-2 px-1 text-center text-slate-400 text-xs border">
-                1
-              </td>
-              <td class="py-2 px-2 border">
+              <td class="text-center text-slate-500 text-xs border">1</td>
+              <td class="p-1 border">
                 <textarea
                   class="input-multiline text-sm font-semibold text-slate-700"
                   rows="1"
                   oninput="autoHeight(this)"
                 ></textarea>
               </td>
-              <td class="py-2 px-1 border">
-                <textarea
-                  class="input-multiline text-[11px] text-center text-blue-600 font-bold"
-                  rows="1"
-                  oninput="autoHeight(this)"
-                ></textarea>
+              <td class="p-1 border">
+                <!-- ប្តូរទៅជា input វិញតាមការស្នើសុំ -->
+                <input
+                  type="text"
+                  class="input-edit text-[11px] text-center text-blue-600 font-bold w-full"
+                />
               </td>
-              <td class="py-2 px-1 border">
+              <td class="p-1 border">
                 <input
                   type="number"
                   oninput="calculateFromPrice(this)"
-                  class="qty text-center input-edit text-sm font-bold w-full"
+                  class="qty input-edit text-center text-sm font-bold w-full"
                 />
               </td>
-              <td class="py-2 px-1 border">
+              <td class="p-1 border">
                 <input
                   type="number"
                   oninput="calculateFromPrice(this)"
-                  class="price text-right input-edit text-sm font-bold w-full text-blue-600"
+                  class="price input-edit text-right text-sm font-bold text-blue-600 w-full"
                 />
               </td>
-              <td class="py-2 px-1 border">
-                <div class="flex items-center">
-                  <span class="ml-1 text-slate-500 text-sm">$</span>
+              <td class="p-1 border">
+                <div class="flex items-center justify-end px-1">
+                  <span class="text-slate-400 text-xs mr-1">$</span>
                   <input
                     type="number"
-                    oninput="calculateGrandTotalOnly()"
-                    class="total-row text-right input-edit text-sm font-extrabold text-slate-800 w-full"
+                    class="total-row input-edit text-right text-sm font-extrabold text-slate-800 w-full"
                     readonly
                   />
                 </div>
@@ -380,60 +346,52 @@
 
       <!-- Footer -->
       <div class="mt-6">
-        <div class="flex justify-between gap-6 items-start mb-6">
-          <!-- Warranty Info -->
-          <div class="w-[60%]">
-            <div
-              class="p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
-            >
-              <h4 class="text-[10px] font-bold text-blue-900 uppercase mb-2">
-                សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
-              </h4>
-              <ul class="text-[9px] text-slate-600 space-y-1 leading-tight">
-                <li>
-                  •
-                  រាល់ទំនិញដែលអតិថិជនទិញរួចមិនអាចប្តូរយកសាច់ប្រាក់ឬដូរវិញបានឡើយ
-                  / Goods are sold no Refund and Return.
-                </li>
-                <li>
-                  • សូមអតិថិជនត្រួតពិនិត្យទំនិញអោយបានច្បាស់លាស់
-                  មុនពេលយកទំនិញចេញពីហាង / Please check the goods carefully
-                  before leaving the store.
-                </li>
-                <li class="font-bold text-slate-800">
-                  • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
-                  និងចូលទឹក ។
-                </li>
-                <li>
-                  • ការបាត់បង់ ឬរហែក Seal ធានារបស់ហាង
-                  និងបាត់វិកយបត្រមិនមានការធានា។
-                </li>
-              </ul>
-            </div>
+        <div class="flex justify-between gap-6 items-start mb-10">
+          <div
+            class="w-[60%] p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
+          >
+            <h4 class="text-[10px] font-bold text-blue-900 uppercase mb-2">
+              សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
+            </h4>
+            <ul class="text-[9px] text-slate-600 space-y-1 leading-tight">
+              <li>
+                • រាល់ទំនិញដែលអតិថិជនទិញរួចមិនអាចប្តូរយកសាច់ប្រាក់ឬដូរវិញបានឡើយ
+                / No Refund.
+              </li>
+              <li>
+                • សូមអតិថិជនត្រួតពិនិត្យទំនិញអោយបានច្បាស់លាស់មុនចាកចេញ / Please
+                check before leaving.
+              </li>
+              <li class="font-bold text-slate-800">
+                • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
+                និងចូលទឹក។
+              </li>
+              <li>• ការបាត់បង់ Seal ធានា ឬ បាត់វិកយបត្រមិនមានការធានាឡើយ។</li>
+            </ul>
           </div>
-
-          <!-- Calculation -->
           <div class="w-[35%] space-y-2">
             <div
-              class="flex justify-between px-3 py-1.5 border-b border-slate-100 bg-blue-700 text-[17px] rounded-xl"
+              class="flex justify-between px-3 py-1.5 bg-blue-700 text-[17px] rounded-xl"
             >
               <span class="font-bold text-white">សរុប / TOTAL :</span>
               <input
                 type="text"
                 id="subtotal"
-                class="w-20 bg-transparent text-white outline-none border-none px-1 font-bold text-right"
+                class="w-24 bg-transparent text-white outline-none font-bold text-right"
                 readonly
               />
             </div>
             <div
               class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[12px]"
             >
-              <span class="font-bold text-slate-500">កក់ / DEPOSIT :</span>
+              <span class="font-bold text-slate-500 uppercase"
+                >កក់ / DEPOSIT :</span
+              >
               <input
                 type="number"
                 id="deposit"
                 oninput="calculateGrandTotalOnly()"
-                class="text-right input-edit font-extrabold w-20 text-blue-600"
+                class="text-right input-edit font-extrabold w-24 text-blue-600"
               />
             </div>
             <div
@@ -445,37 +403,33 @@
               <input
                 type="text"
                 id="balance"
-                class="w-20 outline-none border-none font-bold text-gray-800 text-right"
+                class="w-24 outline-none font-bold text-gray-800 text-right"
                 readonly
               />
             </div>
           </div>
         </div>
-
-        <!-- Signatures -->
         <div class="flex justify-between items-center px-10 mt-10">
           <div class="text-center w-40">
             <p class="kh-moul text-[11px] text-blue-900">អតិថិជន</p>
-            <p class="font-bold text-[10px]">Costumer</p>
-            <div class="h-8 border-b border-slate-200 mb-2"></div>
+            <p class="font-bold text-[10px]">Customer's Signature</p>
+            <div class="h-8 border-b border-slate-200"></div>
           </div>
           <div class="text-center w-40">
             <p class="kh-moul text-[11px] text-blue-900">អ្នកលក់</p>
-            <p class="font-bold text-[10px]">Seller</p>
-            <div class="h-8 border-b border-slate-200 mb-2"></div>
+            <p class="font-bold text-[10px]">Seller's Signature</p>
+            <div class="h-8 border-b border-slate-200"></div>
           </div>
         </div>
       </div>
     </div>
 
     <script>
-      // Auto-height for textareas
       function autoHeight(textarea) {
         textarea.style.height = "auto";
         textarea.style.height = textarea.scrollHeight + "px";
       }
 
-      // Set initial date
       window.onload = function () {
         const dateField = document.getElementById("date-field");
         if (dateField) {
@@ -485,12 +439,9 @@
       };
 
       let isTextInput = false;
-
       function toggleDateInput() {
         const container = document.getElementById("date-container");
-        const oldField = document.getElementById("date-field");
         isTextInput = !isTextInput;
-
         if (isTextInput) {
           container.innerHTML = `
             <span class="font-bold text-slate-500">Date:</span>
@@ -512,12 +463,12 @@
         const row = document.createElement("tr");
         row.className = "item-row border-b border-slate-200";
         row.innerHTML = `
-          <td class="py-2 text-center text-slate-400 text-xs border">${rowCount}</td>
+          <td class="py-2 text-center text-slate-500 text-xs border">${rowCount}</td>
           <td class="p-1 border">
             <textarea class="input-multiline text-sm font-semibold text-slate-700" rows="1" oninput="autoHeight(this)"></textarea>
           </td>
           <td class="p-1 border">
-            <textarea class="input-multiline text-[11px] text-center text-blue-600 font-bold" rows="1" oninput="autoHeight(this)"></textarea>
+            <input type="text" class="input-edit text-[11px] text-center text-blue-600 font-bold w-full">
           </td>
           <td class="p-1 border">
             <input type="number" oninput="calculateFromPrice(this)" class="qty input-edit text-center text-sm font-bold w-full">
@@ -533,7 +484,6 @@
           </td>
         `;
         tbody.appendChild(row);
-        calculateGrandTotalOnly();
       }
 
       function addSixRows() {
@@ -549,8 +499,11 @@
       }
 
       function clearAllRows() {
-        document.getElementById("item-list").innerHTML = "";
-        calculateGrandTotalOnly();
+        if (confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")) {
+          document.getElementById("item-list").innerHTML = "";
+          addRow();
+          calculateGrandTotalOnly();
+        }
       }
 
       function calculateFromPrice(element) {
@@ -568,11 +521,9 @@
         document.querySelectorAll(".total-row").forEach((input) => {
           subtotal += parseFloat(input.value) || 0;
         });
-
         const deposit =
           parseFloat(document.getElementById("deposit").value) || 0;
         const balance = subtotal - deposit;
-
         document.getElementById("subtotal").value =
           subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
         document.getElementById("balance").value =
