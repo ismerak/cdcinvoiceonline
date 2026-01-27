@@ -69,11 +69,6 @@
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
         }
-        /* Hide scrollbars in print */
-        textarea {
-            overflow: hidden !important;
-            resize: none !important;
-        }
       }
 
       .input-edit {
@@ -93,22 +88,28 @@
         outline: none;
       }
 
+      /* Specific Style for Auto-resize Textarea */
+      .textarea-auto {
+        resize: none;
+        overflow: hidden;
+        min-height: 24px;
+        line-height: 1.4;
+        display: block;
+      }
+
       .table-header {
         background-color: var(--primary-blue) !important;
         color: white !important;
       }
 
-      .item-row input, .item-row textarea {
-        font-size: 13px;
+      .item-row td {
+        vertical-align: top; /* កំណត់ឱ្យអត្ថបទនៅខាងលើជានិច្ច */
+        padding-top: 8px;
       }
 
-      /* Textarea specific styling */
-      .auto-textarea {
-        resize: none;
-        overflow: hidden;
-        min-height: 24px;
-        display: block;
-        line-height: 1.4;
+      .item-row input,
+      .item-row textarea {
+        font-size: 13px;
       }
     </style>
   </head>
@@ -287,14 +288,10 @@
               <th class="py-3 px-2 text-center border-r border-white/20 w-24">
                 ការធានា<br />Warranty
               </th>
-              <th
-                class="py-3 px-2 text-center border-r border-white/20 w-16"
-              >
+              <th class="py-3 px-2 text-center border-r border-white/20 w-16">
                 ចំនួន<br />Qty
               </th>
-              <th
-                class="py-3 px-3 text-center border-r border-white/20 w-28"
-              >
+              <th class="py-3 px-3 text-center border-r border-white/20 w-28">
                 តម្លៃរាយ<br />Unit Price
               </th>
               <th class="py-3 px-3 text-right w-32">តម្លៃសរុប<br />Total</th>
@@ -351,7 +348,7 @@
                 <input
                   type="text"
                   id="deposit"
-                  oninput="calculateGrandTotalOnly()"
+                  oninput="calculateGrandTotal()"
                   class="text-right input-edit font-extrabold w-16"
                   value=""
                 />
@@ -364,9 +361,9 @@
                 >នៅខ្វះ / BALANCE :
               </span>
               <input
-                oninput="calculateGrandTotal()"
                 type="text"
                 id="balance"
+                readonly
                 class="w-20 outline-none border-none font-bold text-gray-800"
               />
             </div>
@@ -391,33 +388,26 @@
     <script>
       let isTextInput = false;
 
-      // Auto-resize textarea function
+      // Function to auto-resize textarea
       function autoResize(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
       }
 
-      // Toggle between date input and text input
       function toggleDateInput() {
         const container = document.getElementById("date-container");
-        const oldField = document.getElementById("date-field");
-        const currentValue = oldField.value;
-
         isTextInput = !isTextInput;
 
         if (isTextInput) {
-          // Change to text input
           container.innerHTML = `
             <span class="font-bold text-slate-500">Date:</span>
             <input
               type="text"
               id="date-field"
-              placeholder=""
               class="font-bold text-slate-800 input-edit w-[160px] text-center"
             />
           `;
         } else {
-          // Change back to date input
           container.innerHTML = `
             <span class="font-bold text-slate-500">Date:</span>
             <input
@@ -426,13 +416,10 @@
               class="font-bold text-slate-800 input-edit w-40 text-center"
             />
           `;
-          // Reset to current date as default when switching back
-          const now = new Date().toISOString().split("T")[0];
-          document.getElementById("date-field").value = now;
+          setInitialDate();
         }
       }
 
-      // Initialize default date
       function setInitialDate() {
         const dateField = document.getElementById("date-field");
         if (dateField && dateField.type === "date") {
@@ -446,20 +433,15 @@
         const row = document.createElement("tr");
         row.className = "item-row border-b border-slate-200";
         row.innerHTML = `
-          <td class="py-2 px-1 text-center text-slate-400 text-xs border">${rowCount}</td>
+          <td class="py-2 px-1 text-center text-slate-500 text-xs border">${rowCount}</td>
           <td class="py-2 px-2 border">
             <textarea 
-                rows="1"
-                oninput="autoResize(this)"
-                class="auto-textarea input-edit text-sm w-full font-semibold text-slate-700"
-            ></textarea>
+              rows="1" 
+              oninput="autoResize(this)" 
+              class="textarea-auto input-edit text-sm w-full font-semibold text-slate-700"></textarea>
           </td>
           <td class="py-2 px-1 border">
-            <textarea 
-                rows="1"
-                oninput="autoResize(this)"
-                class="auto-textarea input-edit text-[11px] w-full text-center text-blue-600 font-bold"
-            ></textarea>
+            <input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold">
           </td>
           <td class="py-2 px-1 border">
             <input type="number" oninput="updateRowTotal(this)" class="qty text-center input-edit text-sm font-bold w-full" step="any">
@@ -490,30 +472,20 @@
 
       function calculateGrandTotal() {
         let subtotal = 0;
-
-        // គណនាសរុបរួម
         document.querySelectorAll(".total-row-input").forEach((input) => {
           subtotal += parseFloat(input.value) || 0;
         });
 
         const depositInput = document.getElementById("deposit");
-        const deposit = parseFloat(depositInput.value) || 0;
+        const depositValue = depositInput.value.replace("$", "");
+        const deposit = parseFloat(depositValue) || 0;
         const balance = subtotal - deposit;
 
-        // បង្ហាញ Subtotal: បើស្មើ ០ ឱ្យនៅទទេ បើលើសពី ០ ថែមសញ្ញា $
         document.getElementById("subtotal").value =
           subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
 
-        // បង្ហាញ Balance: បើស្មើ ០ ឱ្យនៅទទេ
         document.getElementById("balance").value =
           balance !== 0 ? "$" + balance.toFixed(2) : "";
-
-        // បើអ្នកចង់ឱ្យ Deposit នៅទទេដែរពេលវាយលេខ ០ (Optional)
-        if (deposit === 0) depositInput.value = "";
-      }
-
-      function calculateGrandTotalOnly() {
-        calculateGrandTotal();
       }
 
       function removeLastRow() {
@@ -525,8 +497,12 @@
       }
 
       function clearAllRows() {
-        if (confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")) {
-          document.getElementById("item-list").innerHTML = "";
+        const tbody = document.getElementById("item-list");
+        if (
+          tbody.rows.length > 0 &&
+          confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")
+        ) {
+          tbody.innerHTML = "";
           addRow();
           document.getElementById("deposit").value = "";
           calculateGrandTotal();
