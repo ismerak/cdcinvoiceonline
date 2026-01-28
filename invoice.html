@@ -99,16 +99,36 @@
         padding-top: 8px;
       }
 
+      /* កែសម្រួលឱ្យ Textarea និង Input រត់ស្របគ្នា */
       .input-multiline {
-        width: 100%;
-        background: transparent;
-        border: none;
-        outline: none;
-        resize: none;
+        line-height: 1.6rem !important;
+        min-height: 1.6rem;
+        height: auto; /* ទុកឱ្យវា auto ដើម្បីកុំឱ្យបាត់អក្សរពេល Enter */
         overflow: hidden;
+        width: 100%;
         display: block;
-        min-height: 1.5em;
-        line-height: 1.5;
+        resize: none;
+      }
+
+      .column-container input,
+      .total-container input {
+        line-height: 1.6rem !important;
+        height: 1.6rem !important;
+        padding: 0 4px !important;
+        margin: 0 !important;
+        display: block;
+        border: 1px solid transparent;
+        background: transparent;
+      }
+
+      .column-container input:focus {
+        border-color: #2563eb;
+        background: white;
+      }
+
+      .item-row td {
+        vertical-align: top !important; /* ឱ្យអត្ថបទរុញទៅលើបំផុត */
+        padding-top: 4px !important;
       }
     </style>
   </head>
@@ -297,52 +317,48 @@
                 ការធានា<br />Warranty
               </th>
               <th class="py-3 px-2 text-center border-r border-white/20 w-20">
-                ចំនួន<br />Qty
+                ចំនួន<br />Quanity
               </th>
               <th class="py-3 px-3 text-center border-r border-white/20 w-32">
-                តម្លៃរាយ<br />Price
+                តម្លៃរាយ<br />Unit Price
               </th>
               <th class="py-3 px-3 text-right w-32">តម្លៃសរុប<br />Total</th>
             </tr>
           </thead>
           <tbody id="item-list">
-            <!-- First Row -->
             <tr class="item-row border-b border-slate-200">
-              <td class="text-center text-slate-500 text-xs border">1</td>
+              <td class="text-center text-slate-500 text-xs border p-1">1</td>
               <td class="p-1 border">
                 <textarea
-                  class="input-multiline text-sm font-semibold text-slate-700"
+                  class="input-multiline text-sm font-semibold text-slate-700 outline-none hover:bg-gray-50"
                   rows="1"
                   oninput="autoHeight(this)"
                 ></textarea>
               </td>
-              <td class="p-1 border">
-                <!-- ប្តូរទៅជា input វិញតាមការស្នើសុំ -->
+              <td class="p-1 border column-container" data-type="warranty">
                 <input
                   type="text"
                   class="input-edit text-[11px] text-center text-blue-600 font-bold w-full"
                 />
               </td>
-              <td class="p-1 border">
+              <td class="p-1 border column-container" data-type="qty">
                 <input
-                  type="number"
+                  type="text"
                   oninput="calculateFromPrice(this)"
                   class="qty input-edit text-center text-sm font-bold w-full"
                 />
               </td>
-              <td class="p-1 flex items-center">
-                <span class="text-slate-400 text-xs mr-1">$</span>
+              <td class="p-1 border column-container" data-type="price">
                 <input
-                  type="number"
+                  type="text"
                   oninput="calculateFromPrice(this)"
-                  class="price input-edit text-right text-sm font-bold text-blue-600 w-full"
+                  class="price input-edit text-center text-sm font-bold text-blue-600 w-full"
                 />
               </td>
-              <td class="p-1 border">
+              <td class="p-1 border total-container">
                 <div class="flex items-center justify-end px-1">
-                  <span class="text-slate-400 text-xs mr-1">$</span>
                   <input
-                    type="number"
+                    type="text"
                     class="total-row input-edit text-right text-sm font-extrabold text-slate-800 w-full"
                     readonly
                   />
@@ -375,7 +391,10 @@
                 • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
                 និងចូលទឹក។
               </li>
-              <li>• ការបាត់បង់ឬរហែក Seal ធានារបស់ហាង  និងបាត់វិកយបត្រមិនមានការធានាឡើយ។</li>
+              <li>
+                • ការបាត់បង់ឬរហែក Seal ធានារបស់ហាង
+                និងបាត់វិកយបត្រមិនមានការធានាឡើយ។
+              </li>
             </ul>
           </div>
           <div class="w-[35%] space-y-2">
@@ -455,76 +474,129 @@
         isTextInput = !isTextInput;
         if (isTextInput) {
           container.innerHTML = `
-            <span class="font-bold text-slate-500">Date:</span>
-            <input type="text" id="date-field" class="font-bold text-slate-800 input-edit w-[160px] text-center" />
-          `;
+        <span class="font-bold text-slate-500">Date:</span>
+        <input type="text" id="date-field" class="font-bold text-slate-800 input-edit w-[160px] text-center" />
+      `;
         } else {
           container.innerHTML = `
-            <span class="font-bold text-slate-500">Date:</span>
-            <input type="date" id="date-field" class="font-bold text-slate-800 input-edit w-40 text-center" />
-          `;
+        <span class="font-bold text-slate-500">Date:</span>
+        <input type="date" id="date-field" class="font-bold text-slate-800 input-edit w-40 text-center" />
+      `;
           const now = new Date().toISOString().split("T")[0];
           document.getElementById("date-field").value = now;
         }
       }
 
+      // មុខងារបន្ថែម ១ ជួរ
       function addRow() {
         const tbody = document.getElementById("item-list");
         const rowCount = tbody.rows.length + 1;
         const row = document.createElement("tr");
         row.className = "item-row border-b border-slate-200";
         row.innerHTML = `
-          <td class="py-2 text-center text-slate-500 text-xs border">${rowCount}</td>
-          <td class="p-1 border">
-            <textarea class="input-multiline text-sm font-semibold text-slate-700" rows="1" oninput="autoHeight(this)"></textarea>
-          </td>
-          <td class="p-1 border">
-            <input type="text" class="input-edit text-[11px] text-center text-blue-600 font-bold w-full">
-          </td>
-          <td class="p-1 border">
-            <input type="number" oninput="calculateFromPrice(this)" class="qty input-edit text-center text-sm font-bold w-full">
-          </td>
-          <td class="p-1  flex items-center">
-            <span class="text-slate-400 text-xs mr-1">$</span>
-            <input type="number" oninput="calculateFromPrice(this)" class="price input-edit text-right text-sm font-bold text-blue-600 w-full">
-          </td>
-          <td class="p-1 border">
-            <div class="flex items-center justify-end px-1">
-              <span class="text-slate-400 text-xs mr-1">$</span>
-              <input type="number" class="total-row input-edit text-right text-sm font-extrabold text-slate-800 w-full" readonly>
-            </div>
-          </td>
-        `;
+      <td class="text-center text-slate-500 text-xs border p-1">${rowCount}</td>
+      <td class="p-1 border">
+          <textarea class="input-multiline text-sm font-semibold text-slate-700 outline-none hover:bg-gray-50" 
+              rows="1" oninput="autoHeight(this)"></textarea>
+      </td>
+      <td class="p-1 border column-container" data-type="warranty">
+          <input type="text" class="input-edit text-[11px] text-center text-blue-600 font-bold w-full">
+      </td>
+      <td class="p-1 border column-container" data-type="qty">
+          <input type="text" oninput="calculateFromPrice(this)" class="qty input-edit text-center text-sm font-bold w-full">
+      </td>
+      <td class="p-1 border column-container" data-type="price">
+          <input type="text" oninput="calculateFromPrice(this)" class="price input-edit text-center text-sm font-bold text-blue-600 w-full">
+      </td>
+      <td class="p-1 border total-container">
+          <input type="text" class="total-row input-edit text-right text-sm font-extrabold text-slate-800 w-full" readonly>
+      </td>
+    `;
         tbody.appendChild(row);
       }
 
+      // មុខងារបន្ថែម ៦ ជួរ (ដែលអ្នកត្រូវការ)
       function addSixRows() {
-        for (let i = 0; i < 6; i++) addRow();
+        for (let i = 0; i < 6; i++) {
+          addRow();
+        }
       }
 
+      // មុខងារលុបជួរចុងក្រោយ
       function removeLastRow() {
         const tbody = document.getElementById("item-list");
         if (tbody.rows.length > 0) {
-          tbody.deleteRow(tbody.rows.length - 1);
+          tbody.deleteRow(-1);
           calculateGrandTotalOnly();
         }
       }
 
+      // មុខងារលុបទាំងអស់
       function clearAllRows() {
-        if (confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")) {
-          document.getElementById("item-list").innerHTML = "";
-          addRow();
-          calculateGrandTotalOnly();
+        const tbody = document.getElementById("item-list");
+        while (tbody.rows.length > 0) {
+          tbody.deleteRow(0);
         }
+        // សម្អាតទិន្នន័យជួរទី១
+        const firstRow = tbody.rows[0];
+        const inputs = firstRow.querySelectorAll("input, textarea");
+        inputs.forEach((input) => (input.value = ""));
+        calculateGrandTotalOnly();
       }
+
+      // មុខងាររក្សាទុកជា PDF
+      function saveAsPDF() {
+        window.print();
+      }
+
+      // ព្រឹត្តិការណ៍ចុច Enter ក្នុង Textarea ដើម្បីចុះបន្ទាត់បន្ថែម Input
+      document.addEventListener("keydown", function (e) {
+        if (
+          e.target.classList.contains("input-multiline") &&
+          e.key === "Enter"
+        ) {
+          const row = e.target.closest("tr");
+          const containers = row.querySelectorAll(".column-container");
+
+          containers.forEach((container) => {
+            const firstInput = container.querySelector("input");
+            const newInput = document.createElement("input");
+            newInput.className = firstInput.className;
+            if (
+              container.dataset.type === "qty" ||
+              container.dataset.type === "price"
+            ) {
+              newInput.oninput = function () {
+                calculateFromPrice(this);
+              };
+            }
+            container.appendChild(newInput);
+          });
+
+          const totalContainer = row.querySelector(".total-container");
+          const firstTotal = totalContainer.querySelector("input");
+          const newTotal = document.createElement("input");
+          newTotal.className = firstTotal.className;
+          newTotal.readOnly = true;
+          totalContainer.appendChild(newTotal);
+
+          setTimeout(() => autoHeight(e.target), 10);
+        }
+      });
 
       function calculateFromPrice(element) {
         const row = element.closest("tr");
-        const qty = parseFloat(row.querySelector(".qty").value) || 0;
-        const price = parseFloat(row.querySelector(".price").value) || 0;
-        const totalInput = row.querySelector(".total-row");
-        const total = qty * price;
-        totalInput.value = total > 0 ? total.toFixed(2) : "";
+        const qtys = row.querySelectorAll(".qty");
+        const prices = row.querySelectorAll(".price");
+        const totals = row.querySelectorAll(".total-row");
+
+        qtys.forEach((qtyInput, index) => {
+          const q = parseFloat(qtyInput.value) || 0;
+          const p = parseFloat(prices[index].value) || 0;
+          const lineTotal = q * p;
+          totals[index].value = lineTotal > 0 ? lineTotal.toFixed(2) : "";
+        });
+
         calculateGrandTotalOnly();
       }
 
@@ -533,17 +605,15 @@
         document.querySelectorAll(".total-row").forEach((input) => {
           subtotal += parseFloat(input.value) || 0;
         });
+
         const deposit =
           parseFloat(document.getElementById("deposit").value) || 0;
         const balance = subtotal - deposit;
+
         document.getElementById("subtotal").value =
           subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
         document.getElementById("balance").value =
           balance !== 0 ? "$" + balance.toFixed(2) : "";
-      }
-
-      function saveAsPDF() {
-        window.print();
       }
     </script>
   </body>
