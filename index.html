@@ -93,7 +93,7 @@
         resize: none;
         overflow: hidden;
         min-height: 24px;
-        line-height: 1.4;
+        line-height: 1.6rem !important; /* កែសម្រួលឱ្យត្រូវនឹង input */
         display: block;
       }
 
@@ -103,7 +103,7 @@
       }
 
       .item-row td {
-        vertical-align: top; /* កំណត់ឱ្យអត្ថបទនៅខាងលើជានិច្ច */
+        vertical-align: top;
         padding-top: 8px;
       }
 
@@ -111,10 +111,18 @@
       .item-row textarea {
         font-size: 13px;
       }
+
+      /* បន្ថែមដើម្បីឱ្យ input រត់ស្របគ្នាពេល Enter */
+      .column-container input {
+        display: block;
+        width: 100%;
+        line-height: 1.6rem !important;
+        height: 1.6rem !important;
+        margin-bottom: 0px;
+      }
     </style>
   </head>
   <body class="py-10">
-    <!-- Navbar Controls -->
     <div
       class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4"
     >
@@ -184,9 +192,7 @@
       </div>
     </div>
 
-    <!-- Main Invoice Document -->
     <div id="invoice-card">
-      <!-- Header Section -->
       <div class="text-center m-auto mt-[-10px]">
         <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
         <p
@@ -240,7 +246,6 @@
         </div>
       </div>
 
-      <!-- Customer Info -->
       <div
         class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50 mt-[-17px]"
       >
@@ -276,7 +281,6 @@
         </div>
       </div>
 
-      <!-- Items Table -->
       <div class="flex-grow overflow-hidden mt-[-20px]">
         <table class="w-full border-collapse border border-slate-200">
           <thead>
@@ -291,7 +295,7 @@
                 ការធានា<br />Warranty
               </th>
               <th class="py-3 px-2 text-center border-r border-white/20 w-16">
-                ចំនួន<br />Qty
+                ចំនួន<br />Quanity
               </th>
               <th class="py-3 px-3 text-center border-r border-white/20 w-28">
                 តម្លៃរាយ<br />Unit Price
@@ -303,7 +307,6 @@
         </table>
       </div>
 
-      <!-- Footer Section -->
       <div class="mt-2">
         <div
           class="flex justify-between gap-6 items-start mb-10 relative top-[17px]"
@@ -344,32 +347,28 @@
               <input
                 type="text"
                 id="subtotal"
-                class="w-20 text-blue-600 text-black outline-none border-none px-1 font-bold"
+                class="w-20 text-blue-600 text-black outline-none border-none px-1 font-bold text-right"
               />
             </div>
             <div
               class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[15px]"
             >
               <span class="font-bold text-black">កក់ / DEPOSIT :</span>
-              <div
-                class="flex items-center gap-1 font-bold text-blue-600 relative"
-              >
-                <input
-                  type="text"
-                  id="deposit"
-                  oninput="calculateGrandTotal()"
-                  class="input-edit font-extrabold w-16 relative w-[80px]"
-                />
-              </div>
+              <input
+                type="text"
+                id="deposit"
+                oninput="calculateGrandTotal()"
+                class="input-edit font-extrabold w-[80px] text-blue-600 text-right"
+              />
             </div>
             <div class="flex justify-between items-center px-3 py-3 text-black">
               <span class="text-[15px] font-bold uppercase"
-                >នៅខ្វះ / BALANCE :
-              </span>
+                >នៅខ្វះ / BALANCE :</span
+              >
               <input
                 type="text"
                 id="balance"
-                class="w-20 outline-none border-none font-bold text-black"
+                class="w-20 outline-none border-none font-bold text-black text-right"
               />
             </div>
           </div>
@@ -393,7 +392,6 @@
     <script>
       let isTextInput = false;
 
-      // Function to auto-resize textarea
       function autoResize(textarea) {
         textarea.style.height = "auto";
         textarea.style.height = textarea.scrollHeight + "px";
@@ -402,33 +400,22 @@
       function toggleDateInput() {
         const container = document.getElementById("date-container");
         isTextInput = !isTextInput;
-
         if (isTextInput) {
-          container.innerHTML = `
-            <span class="font-bold text-slate-500">Date:</span>
-            <input
-              type="text"
-              id="date-field"
-              class="font-bold text-slate-800 input-edit w-[160px] text-center"
-            />
-          `;
+          container.innerHTML = `<span class="font-bold text-slate-500">Date:</span><input type="text" id="date-field" class="font-bold text-slate-800 input-edit w-[160px] text-center" />`;
         } else {
-          container.innerHTML = `
-            <span class="font-bold text-slate-500">Date:</span>
-            <input
-              type="date"
-              id="date-field"
-              class="font-bold text-slate-800 input-edit w-40 text-center"
-            />
-          `;
+          container.innerHTML = `<span class="font-bold text-slate-500">Date:</span><input type="date" id="date-field" class="font-bold text-slate-800 input-edit w-40 text-center" />`;
           setInitialDate();
         }
       }
 
       function setInitialDate() {
         const dateField = document.getElementById("date-field");
-        if (dateField && dateField.type === "date") {
-          dateField.value = new Date().toISOString().split("T")[0];
+        if (
+          dateField &&
+          (dateField.type === "date" || dateField.tagName === "INPUT")
+        ) {
+          const now = new Date().toISOString().split("T")[0];
+          if (dateField.type === "date") dateField.value = now;
         }
       }
 
@@ -438,41 +425,81 @@
         const row = document.createElement("tr");
         row.className = "item-row border-b border-slate-200";
         row.innerHTML = `
-          <td class="py-2 px-1 text-center text-slate-500 text-xs border">${rowCount}</td>
+          <td class="py-2 px-1  text-center text-slate-500 text-xs border">${rowCount}</td>
           <td class="py-2 px-2 border">
-            <textarea 
-              rows="1" 
-              oninput="autoResize(this)" 
-              class="textarea-auto input-edit text-sm w-full font-semibold text-slate-700"></textarea>
+            <textarea rows="1" oninput="autoResize(this)" class="textarea-auto input-edit text-sm w-full font-semibold text-slate-700"></textarea>
           </td>
-          <td class="py-2 px-1 border">
+          <td class="py-2 px-1 border column-container" data-type="warranty">
             <input type="text" class="input-edit text-[11px] w-full text-center text-blue-600 font-bold">
           </td>
-          <td class="py-2 px-1 border">
-            <input type="number" oninput="updateRowTotal(this)" class="qty text-center input-edit text-sm font-bold w-full" step="any">
+          <td class="py-2 px-1 border column-container" data-type="qty">
+            <input type="text" oninput="updateRowTotal(this)" class="qty text-center input-edit text-sm font-bold w-full" step="any">
           </td>
-          <td class="py-2 px-1  flex items-center">
-            <span class="text-slate-400 text-xs mr-1">$</span>
-            <input type="number" oninput="updateRowTotal(this)" class="price text-right input-edit text-sm font-bold w-full text-blue-600" step="any">
+          <td class="py-2 px-1 border column-container" data-type="price">
+            <div class="flex items-center">
+                <input type="text" oninput="updateRowTotal(this)" class="price text-center input-edit text-sm font-bold w-full text-blue-600" step="any">
+            </div>
           </td>
-          <td class="py-2 px-1 border ">
+          <td class="py-2 px-1 border column-container">
             <div class="flex items-center justify-end">
-                <span class="text-slate-400 text-xs mr-1">$</span>
-                <input type="number" oninput="calculateGrandTotal()" class="total-row-input text-right input-edit text-sm font-extrabold text-slate-800 w-full" step="any">
+                <input type="text" class="total-row-input text-right input-edit text-sm font-extrabold text-slate-800 w-full" step="any" readonly>
             </div>
           </td>
         `;
         tbody.appendChild(row);
       }
 
+      // មុខងារបន្ថែមនៅពេលចុច Enter ក្នុង Textarea
+      document.addEventListener("keydown", function (e) {
+        if (e.target.classList.contains("textarea-auto") && e.key === "Enter") {
+          const row = e.target.closest("tr");
+
+          // បន្ថែម Input ក្នុង Warranty, Qty, Price
+          const containers = row.querySelectorAll(".column-container");
+          containers.forEach((container) => {
+            const firstInput = container.querySelector("input");
+            const newInput = document.createElement("input");
+            newInput.className = firstInput.className;
+            newInput.type = firstInput.type;
+            if (
+              container.dataset.type === "qty" ||
+              container.dataset.type === "price"
+            ) {
+              newInput.oninput = function () {
+                updateRowTotal(this);
+              };
+            }
+            container.appendChild(newInput);
+          });
+
+          // បន្ថែម Input ក្នុង Total
+          const totalContainer = row.querySelector(".total-container");
+          const firstTotal = totalContainer.querySelector("input");
+          const newTotal = document.createElement("input");
+          newTotal.className = firstTotal.className;
+          newTotal.type = "number";
+          newTotal.readOnly = true;
+          totalContainer.querySelector(".flex").appendChild(newTotal);
+
+          setTimeout(() => autoResize(e.target), 10);
+        }
+      });
+
       function updateRowTotal(input) {
         const row = input.closest("tr");
-        const qty = parseFloat(row.querySelector(".qty").value) || 0;
-        const price = parseFloat(row.querySelector(".price").value) || 0;
-        const totalInput = row.querySelector(".total-row-input");
-        if (qty > 0 && price > 0) {
-          totalInput.value = (qty * price).toFixed(2);
-        }
+        const qtys = row.querySelectorAll(".qty");
+        const prices = row.querySelectorAll(".price");
+        const totals = row.querySelectorAll(".total-row-input");
+
+        qtys.forEach((qtyInput, index) => {
+          const q = parseFloat(qtyInput.value) || 0;
+          const p = parseFloat(prices[index].value) || 0;
+          if (q > 0 && p > 0) {
+            totals[index].value = (q * p).toFixed(2);
+          } else {
+            totals[index].value = "";
+          }
+        });
         calculateGrandTotal();
       }
 
@@ -482,14 +509,12 @@
           subtotal += parseFloat(input.value) || 0;
         });
 
-        const depositInput = document.getElementById("deposit");
-        const depositValue = depositInput.value.replace("$", "");
-        const deposit = parseFloat(depositValue) || 0;
+        const deposit =
+          parseFloat(document.getElementById("deposit").value) || 0;
         const balance = subtotal - deposit;
 
         document.getElementById("subtotal").value =
           subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
-
         document.getElementById("balance").value =
           balance !== 0 ? "$" + balance.toFixed(2) : "";
       }
