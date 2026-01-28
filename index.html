@@ -31,7 +31,7 @@
         width: 210mm;
         min-height: 297mm;
         background: white;
-        padding: 10mm;
+        padding: 7mm;
         margin: 20px auto;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         position: relative;
@@ -62,7 +62,7 @@
           border: none !important;
           width: 210mm;
           height: 297mm;
-          padding: 9mm;
+          padding: 8mm;
           overflow: hidden;
         }
         * {
@@ -196,11 +196,11 @@
         </p>
       </div>
 
-      <div class="mb-6 mt-[-110px]">
+      <div class="mb-6 mt-[-130px]">
         <div class="w-3/5">
-          <div class="relative mb-4 inline-block">
+          <div class="relative mb-1 inline-block">
             <div
-              class="w-[90px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400"
+              class="w-[90px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 relative top-[5px]"
             >
               <img
                 src="./cdcicon.png"
@@ -241,41 +241,43 @@
       </div>
 
       <!-- Customer Info -->
-      <div class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50">
+      <div
+        class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50 mt-[-17px]"
+      >
         <h2 class="font-bold mb-2">Customer/Company</h2>
         <div class="space-y-1">
           <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[11px] text-blue-600 w-32 font-bold uppercase"
+            <span class="text-[15px] text-blue-600 w-32 font-bold uppercase"
               >អតិថិជន/Name:</span
             >
             <input
               type="text"
-              class="text-sm font-bold text-slate-800 input-edit w-full"
+              class="text-[15px] font-bold text-slate-800 input-edit w-full"
             />
           </div>
           <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[11px] text-blue-600 w-32 font-bold uppercase"
+            <span class="text-[15px] text-blue-600 w-32 font-bold uppercase"
               >ទូរស័ព្ទ/Tel:</span
             >
             <input
               type="text"
-              class="text-sm text-slate-700 input-edit w-full"
+              class="text-[15px] text-slate-700 input-edit w-full"
             />
           </div>
           <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[11px] text-blue-600 w-32 font-bold uppercase"
+            <span class="text-[15px] text-blue-600 w-32 font-bold uppercase"
               >ទីតាំង/Address:</span
             >
             <input
               type="text"
-              class="text-sm text-slate-700 input-edit w-full"
+              class="text-[15px] text-slate-700 input-edit w-full"
             />
           </div>
         </div>
       </div>
 
       <!-- Items Table -->
-      <div class="flex-grow overflow-hidden">
+      <div class="flex-grow overflow-hidden mt-[-20px]">
         <table class="w-full border-collapse border border-slate-200">
           <thead>
             <tr class="table-header text-[11px] font-bold uppercase">
@@ -302,15 +304,17 @@
       </div>
 
       <!-- Footer Section -->
-      <div class="mt-6">
-        <div class="flex justify-between gap-6 items-start mb-10">
+      <div class="mt-2">
+        <div
+          class="flex justify-between gap-6 items-start mb-10 relative top-[17px]"
+        >
           <div
             class="w-[60%] p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
           >
-            <h4 class="text-[10px] font-bold text-blue-900 uppercase mb-2">
+            <h4 class="text-[17px] font-bold text-blue-900 uppercase mb-2">
               សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
             </h4>
-            <ul class="text-[9px] text-slate-600 space-y-1 leading-tight">
+            <ul class="text-[15px] text-slate-600 space-y-1 leading-tight">
               <li>
                 • រាល់ទំនិញដែលអតិថិជនទិញរួចមិនអាចប្តូរយកសាច់ប្រាក់ឬដូរវិញបានឡើយ
                 / No Refund.
@@ -323,48 +327,49 @@
                 • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
                 និងចូលទឹក។
               </li>
-              <li>• ការបាត់បង់ Seal ធានា ឬ បាត់វិកយបត្រមិនមានការធានាឡើយ។</li>
+              <li>
+                • ការបាត់បង់ឬរហែក Seal ធានារបស់ហាង
+                និងបាត់វិកយបត្រមិនមានការធានាឡើយ។
+              </li>
             </ul>
           </div>
 
           <div class="w-[35%] space-y-2">
             <div
-              class="flex justify-between px-3 py-1.5 border-b border-slate-100 bg-blue-700 text-[17px] rounded-xl"
+              class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[17px] rounded-xl"
             >
-              <span class="font-bold text-white">សរុប / TOTAL :</span>
+              <span class="font-bold text-black relative left-[-2px]"
+                >សរុប / TOTAL :</span
+              >
               <input
                 type="text"
                 id="subtotal"
-                class="w-20 bg-transparent text-white outline-none border-none px-1 font-bold"
+                class="w-20 text-blue-600 text-black outline-none border-none px-1 font-bold"
               />
             </div>
             <div
-              class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[12px]"
+              class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[15px]"
             >
-              <span class="font-bold text-slate-500">កក់ / DEPOSIT :</span>
+              <span class="font-bold text-black">កក់ / DEPOSIT :</span>
               <div
-                class="flex items-center gap-1 font-bold text-blue-600 relative left-[10px]"
+                class="flex items-center gap-1 font-bold text-blue-600 relative"
               >
                 <input
                   type="text"
                   id="deposit"
                   oninput="calculateGrandTotal()"
-                  class="text-right input-edit font-extrabold w-16"
-                  value=""
+                  class="input-edit font-extrabold w-16 relative w-[80px]"
                 />
               </div>
             </div>
-            <div
-              class="flex justify-between items-center px-3 py-3 text-slate-500"
-            >
-              <span class="text-[11px] font-bold uppercase"
+            <div class="flex justify-between items-center px-3 py-3 text-black">
+              <span class="text-[15px] font-bold uppercase"
                 >នៅខ្វះ / BALANCE :
               </span>
               <input
                 type="text"
                 id="balance"
-                readonly
-                class="w-20 outline-none border-none font-bold text-gray-800"
+                class="w-20 outline-none border-none font-bold text-black"
               />
             </div>
           </div>
@@ -446,7 +451,7 @@
           <td class="py-2 px-1 border">
             <input type="number" oninput="updateRowTotal(this)" class="qty text-center input-edit text-sm font-bold w-full" step="any">
           </td>
-          <td class="py-2 px-1 border flex items-center">
+          <td class="py-2 px-1  flex items-center">
             <span class="text-slate-400 text-xs mr-1">$</span>
             <input type="number" oninput="updateRowTotal(this)" class="price text-right input-edit text-sm font-bold w-full text-blue-600" step="any">
           </td>
