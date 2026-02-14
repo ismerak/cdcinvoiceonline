@@ -1,430 +1,398 @@
 <!doctype html>
 <html lang="km">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="./cdcicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CDC Computer - Invoice System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Moul&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --primary-blue: #1e3a8a;
-        --accent-blue: #2563eb;
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="./cdcicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDC Computer - Invoice System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Moul&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --primary-blue: #1e3a8a;
+      --accent-blue: #2563eb;
+    }
+
+    body {
+      font-family: "Kantumruy Pro", sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    .kh-moul {
+      font-family: "Moul", serif;
+    }
+
+    /* Layout Optimization for A4 */
+    #invoice-card {
+      width: 210mm;
+      min-height: 297mm;
+      background: white;
+      padding: 7mm;
+      margin: 20px auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    @media print {
+      img {
+        display: block !important;
       }
-      body {
-        font-family: "Kantumruy Pro", sans-serif;
-        background-color: #f1f5f9;
-        color: #1e293b;
+
+      @page {
+        size: A4;
         margin: 0;
+      }
+
+      body {
+        background: white;
         padding: 0;
-      }
-      .kh-moul {
-        font-family: "Moul", serif;
+        margin: 0;
       }
 
-      /* Layout Optimization for A4 */
+      .no-print {
+        display: none !important;
+      }
+
       #invoice-card {
+        box-shadow: none !important;
+        margin: 0 !important;
+        border: none !important;
         width: 210mm;
-        min-height: 297mm;
-        background: white;
-        padding: 7mm;
-        margin: 20px auto;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-      }
-
-      @media print {
-        img {
-          display: block !important;
-        }
-        @page {
-          size: A4;
-          margin: 0;
-        }
-        body {
-          background: white;
-          padding: 0;
-          margin: 0;
-        }
-        .no-print {
-          display: none !important;
-        }
-        #invoice-card {
-          box-shadow: none !important;
-          margin: 0 !important;
-          border: none !important;
-          width: 210mm;
-          height: 297mm;
-          padding: 8mm;
-          overflow: hidden;
-        }
-        * {
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-      }
-
-      .input-edit {
-        border: 1px solid transparent;
-        background: transparent;
-        transition: all 0.2s;
-        border-radius: 4px;
-        padding: 2px 4px;
-      }
-      .input-edit:hover:not(:disabled) {
-        background: #f8fafc;
-        border-color: #e2e8f0;
-      }
-      .input-edit:focus {
-        background: white;
-        border-color: var(--accent-blue);
-        outline: none;
-      }
-
-      /* Specific Style for Auto-resize Textarea */
-      .textarea-auto {
-        resize: none;
+        height: 297mm;
+        padding: 8mm;
         overflow: hidden;
-        min-height: 24px;
-        line-height: 1.6rem !important; /* កែសម្រួលឱ្យត្រូវនឹង input */
-        display: block;
       }
 
-      .table-header {
-        background-color: var(--primary-blue) !important;
-        color: white !important;
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    .input-edit {
+      border: 1px solid transparent;
+      background: transparent;
+      transition: all 0.2s;
+      border-radius: 4px;
+      padding: 2px 4px;
+    }
+
+    .input-edit:hover:not(:disabled) {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .input-edit:focus {
+      background: white;
+      border-color: var(--accent-blue);
+      outline: none;
+    }
+
+    /* Specific Style for Auto-resize Textarea */
+    .textarea-auto {
+      resize: none;
+      overflow: hidden;
+      min-height: 24px;
+      line-height: 1.6rem !important;
+      /* កែសម្រួលឱ្យត្រូវនឹង input */
+      display: block;
+    }
+
+    .table-header {
+      background-color: var(--primary-blue) !important;
+      color: white !important;
+    }
+
+    .item-row td {
+      vertical-align: top;
+      padding-top: 8px;
+    }
+
+    .item-row input,
+    .item-row textarea {
+      font-size: 13px;
+    }
+
+    /* បន្ថែមដើម្បីឱ្យ input រត់ស្របគ្នាពេល Enter */
+    .column-container input {
+      display: block;
+      width: 100%;
+      line-height: 1.6rem !important;
+      height: 1.6rem !important;
+      margin-bottom: 0px;
+    }
+
+    @media print {
+
+      /* លាក់ Placeholder និង Border ទាំងអស់ពេល Save ជា PDF */
+      .no-print,
+      #upload-placeholder {
+        display: none !important;
       }
 
-      .item-row td {
-        vertical-align: top;
-        padding-top: 8px;
+      #photo-preview img {
+        /* ធានាថារូបភាពហត្ថលេខាច្បាស់ល្អ */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
+    }
 
-      .item-row input,
-      .item-row textarea {
-        font-size: 13px;
-      }
+    /* បន្ថែមស្ទីលបន្តិចបន្តួចឱ្យមើលទៅដូចក្រដាសពិត */
+    #photo-preview img {
+      mix-blend-mode: multiply;
+      /* ជួយឱ្យរូបភាពដែលមាន Background ពណ៌ស ក្លាយជាថ្លា (Transparent) ជាមួយក្រដាស */
+      filter: contrast(1.1);
+    }
+  </style>
+</head>
 
-      /* បន្ថែមដើម្បីឱ្យ input រត់ស្របគ្នាពេល Enter */
-      .column-container input {
-        display: block;
-        width: 100%;
-        line-height: 1.6rem !important;
-        height: 1.6rem !important;
-        margin-bottom: 0px;
-      }
-    </style>
-  </head>
-  <body class="py-10">
+<body class="py-10">
+  <div class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4">
     <div
-      class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4"
-    >
-      <div
-        class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between"
-      >
-        <div class="flex items-center gap-2">
-          <a
-            href="invoice.html"
-            class="text-blue-700 font-bold p-2 hover:bg-blue-50 rounded-xl transition-all"
-            >វិក្កយបត្រថ្មី</a
-          >
-          <button
-            onclick="removeLastRow()"
-            class="text-orange-600 font-bold p-2 hover:bg-orange-50 rounded-xl transition-all"
-          >
-            លុបជួរចុងក្រោយ
-          </button>
-          <button
-            onclick="clearAllRows()"
-            class="text-red-700 font-bold p-2 hover:bg-red-50 rounded-xl transition-all"
-          >
-            លុបទាំងអស់
-          </button>
-        </div>
+      class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <a href="invoice.html"
+          class="text-blue-700 font-bold p-2 hover:bg-blue-50 rounded-xl transition-all">វិក្កយបត្រថ្មី</a>
+        <button onclick="removeLastRow()"
+          class="text-orange-600 font-bold p-2 hover:bg-orange-50 rounded-xl transition-all">
+          លុបជួរចុងក្រោយ
+        </button>
+        <button onclick="clearAllRows()" class="text-red-700 font-bold p-2 hover:bg-red-50 rounded-xl transition-all">
+          លុបទាំងអស់
+        </button>
+      </div>
 
-        <div class="flex gap-2 items-center">
-          <button
-            onclick="addRows(6)"
-            class="text-blue-700 text-sm font-bold p-1 py-2 px-3 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
-          >
-            បន្ថែម 6 ជួរ
-          </button>
-          <button
-            onclick="addRow()"
-            class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100"
-          >
-            ថែម 1 ជួរ
-          </button>
-          <button
-            onclick="toggleDateInput()"
-            class="px-3 py-2 text-sm font-bold text-purple-700 hover:bg-purple-50 rounded-xl transition-all border border-purple-100"
-          >
-            ប្តូរទម្រង់ថ្ងៃ (Date/Text)
-          </button>
-          <button
-            onclick="saveAsPDF()"
-            class="px-5 py-2 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 rounded-xl transition-all shadow-lg flex items-center gap-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-              />
-            </svg>
-            រក្សាទុកជា PDF
-          </button>
-        </div>
+      <div class="flex gap-2 items-center">
+        <button onclick="addRows(6)"
+          class="text-blue-700 text-sm font-bold p-1 py-2 px-3 hover:bg-blue-50 rounded-xl transition-all border border-blue-100">
+          បន្ថែម 6 ជួរ
+        </button>
+        <button onclick="addRow()"
+          class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100">
+          ថែម 1 ជួរ
+        </button>
+        <button onclick="toggleDateInput()"
+          class="px-3 py-2 text-sm font-bold text-purple-700 hover:bg-purple-50 rounded-xl transition-all border border-purple-100">
+          ប្តូរទម្រង់ថ្ងៃ (Date/Text)
+        </button>
+        <button onclick="saveAsPDF()"
+          class="px-5 py-2 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 rounded-xl transition-all shadow-lg flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          រក្សាទុកជា PDF
+        </button>
       </div>
     </div>
+  </div>
 
-    <div id="invoice-card">
-      <div class="text-center m-auto mt-[-10px]">
-        <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
-        <p
-          class="text-slate-400 font-bold tracking-widest text-4xl mb-4 uppercase"
-        >
-          Invoice
-        </p>
-      </div>
+  <div id="invoice-card">
+    <div class="text-center m-auto mt-[-10px]">
+      <h1 class="kh-moul text-4xl text-blue-700 mb-3">វិក្កយបត្រ</h1>
+      <p class="text-slate-400 font-bold tracking-widest text-4xl mb-4 uppercase">
+        Invoice
+      </p>
+    </div>
 
-      <div class="mb-6 mt-[-130px]">
-        <div class="w-3/5">
-          <div class="relative mb-1 inline-block">
-            <div
-              class="w-[90px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 relative top-[5px]"
-            >
-              <img
-                src="./cdcicon.png"
-                class="w-full h-full"
-                onerror="
-                  this.src = 'https://via.placeholder.com/90x90?text=Logo'
-                "
-              />
-            </div>
-          </div>
-
-          <div class="pr-6 flex justify-between items-center w-[678px]">
-            <div class="left">
-              <h2 class="font-bold text-3xl text-blue-700 mb-1">
-                CDC Computer
-              </h2>
-              <div class="text-[13px] font-bold text-slate-800">
-                <span class="text-blue-700">លេខទូរស័ព្ទ៖</span> 099 844 884 /
-                093 844 884
-              </div>
-              <div class="text-[12px] text-slate-600 leading-snug">
-                <span class="font-bold text-blue-700">អាសយដ្ឋាន៖</span> ផ្ទះលេខ
-                1203 ផ្លូវជាតិលេខ 2 សង្កាត់ចាក់អង្រែលើ ខណ្ឌមានជ័យ ភ្នំពេញ។
-              </div>
-            </div>
-            <div class="relative left-[60px]">
-              <div id="date-container" class="relative top-[28px]">
-                <span class="font-bold text-slate-500">Date:</span>
-                <input
-                  type="date"
-                  id="date-field"
-                  class="font-bold text-slate-800 input-edit w-40 text-center"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50 mt-[-17px]"
-      >
-        <h2 class="font-bold mb-2">Customer/Company</h2>
-        <div class="space-y-1">
-          <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[15px] text-blue-600 w-32 font-bold uppercase"
-              >អតិថិជន/Name:</span
-            >
-            <input
-              type="text"
-              class="text-[15px] font-bold text-slate-800 input-edit w-full"
-            />
-          </div>
-          <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[15px] text-blue-600 w-32 font-bold uppercase"
-              >ទូរស័ព្ទ/Tel:</span
-            >
-            <input
-              type="text"
-              class="text-[15px] text-slate-700 input-edit w-full"
-            />
-          </div>
-          <div class="flex items-center border-b border-blue-200 pb-1">
-            <span class="text-[15px] text-blue-600 w-32 font-bold uppercase"
-              >ទីតាំង/Address:</span
-            >
-            <input
-              type="text"
-              class="text-[15px] text-slate-700 input-edit w-full"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="flex-grow overflow-hidden mt-[-20px]">
-        <table class="w-full border-collapse border border-slate-200">
-          <thead>
-            <tr class="table-header text-[11px] font-bold uppercase">
-              <th class="py-3 px-2 text-center border-r border-white/20 w-10">
-                ល.រ<br />No
-              </th>
-              <th class="py-2 px-3 text-center border-r border-white/20">
-                រាយមុខទំនិញ<br />Name of Goods
-              </th>
-              <th class="py-3 px-2 text-center border-r border-white/20 w-24">
-                ការធានា<br />Warranty
-              </th>
-              <th class="py-3 px-2 text-center border-r border-white/20 w-16">
-                ចំនួន<br />Quanity
-              </th>
-              <th class="py-3 px-3 text-center border-r border-white/20 w-28">
-                តម្លៃរាយ<br />Unit Price
-              </th>
-              <th class="py-3 px-3 text-right w-32">តម្លៃសរុប<br />Total</th>
-            </tr>
-          </thead>
-          <tbody id="item-list"></tbody>
-        </table>
-      </div>
-
-      <div class="mt-2">
-        <div
-          class="flex justify-between gap-6 items-start mb-10 relative top-[17px]"
-        >
+    <div class="mb-6 mt-[-130px]">
+      <div class="w-3/5">
+        <div class="relative mb-1 inline-block">
           <div
-            class="w-[60%] p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed"
-          >
-            <h4 class="text-[17px] font-bold text-blue-900 uppercase mb-2">
-              សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
-            </h4>
-            <ul class="text-[15px] text-slate-600 space-y-1 leading-tight">
-              <li>
-                • រាល់ទំនិញដែលអតិថិជនទិញរួចមិនអាចប្តូរយកសាច់ប្រាក់ឬដូរវិញបានឡើយ
-                / No Refund.
-              </li>
-              <li>
-                • សូមអតិថិជនត្រួតពិនិត្យទំនិញអោយបានច្បាស់លាស់មុនចាកចេញ / Please
-                check before leaving.
-              </li>
-              <li class="font-bold text-slate-800">
-                • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
-                និងចូលទឹក។
-              </li>
-              <li>
-                • ការបាត់បង់ឬរហែក Seal ធានារបស់ហាង
-                និងបាត់វិកយបត្រមិនមានការធានាឡើយ។
-              </li>
-            </ul>
-          </div>
-
-          <div class="w-[35%] space-y-2">
-            <div
-              class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[17px] rounded-xl"
-            >
-              <span class="font-bold text-black relative left-[-2px]"
-                >សរុប / TOTAL :</span
-              >
-              <input
-                type="text"
-                id="subtotal"
-                class="w-[95px] text-blue-600 text-black outline-none border-none px-1 font-bold text-right"
-              />
-            </div>
-            <div
-              class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[15px]"
-            >
-              <span class="font-bold text-black">កក់ / DEPOSIT :</span>
-              <input
-                type="text"
-                id="deposit"
-                oninput="calculateGrandTotal()"
-                class="input-edit font-extrabold w-[80px] text-blue-600 text-right"
-              />
-            </div>
-            <div class="flex justify-between items-center px-3 py-3 text-black">
-              <span class="text-[15px] font-bold uppercase"
-                >នៅខ្វះ / BALANCE :</span
-              >
-              <input
-                type="text"
-                id="balance"
-                class="w-[95px] outline-none border-none font-bold text-black text-right"
-              />
-            </div>
+            class="w-[90px] h-35 border-slate-200 rounded-lg flex flex-col items-center justify-center text-slate-400 relative top-[5px]">
+            <img src="./cdcicon.png" class="w-full h-full" onerror="
+                  this.src = 'https://via.placeholder.com/90x90?text=Logo'
+                " />
           </div>
         </div>
 
-        <div class="flex justify-between items-center px-10 mb-4">
-          <div class="text-center w-40">
-            <p class="kh-moul text-[11px] text-blue-900">អតិថិជន</p>
-            <p class="font-bold text-[10px]">Customer's Signature</p>
-            <div class="mt-12 border-b border-slate-200"></div>
+        <div class="pr-6 flex justify-between items-center w-[678px]">
+          <div class="left">
+            <h2 class="font-bold text-3xl text-blue-700 mb-1">
+              CDC Computer
+            </h2>
+            <div class="text-[13px] font-bold text-slate-800">
+              <span class="text-blue-700">លេខទូរស័ព្ទ៖</span> 099 844 884 /
+              093 844 884
+            </div>
+            <div class="text-[12px] text-slate-600 leading-snug">
+              <span class="font-bold text-blue-700">អាសយដ្ឋាន៖</span> ផ្ទះលេខ
+              1203 ផ្លូវជាតិលេខ 2 សង្កាត់ចាក់អង្រែលើ ខណ្ឌមានជ័យ ភ្នំពេញ។
+            </div>
           </div>
-          <div class="text-center w-40">
-            <p class="kh-moul text-[11px] text-blue-900">អ្នកលក់</p>
-            <p class="font-bold text-[10px]">Seller's Signature</p>
-            <div class="mt-12 border-b border-slate-200"></div>
+          <div class="relative left-[60px]">
+            <div id="date-container" class="relative top-[28px]">
+              <span class="font-bold text-slate-500">Date:</span>
+              <input type="date" id="date-field" class="font-bold text-slate-800 input-edit w-40 text-center" />
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <script>
-      let isTextInput = false;
+    <div class="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50 mt-[-17px]">
+      <h2 class="font-bold mb-2">Customer/Company</h2>
+      <div class="space-y-1">
+        <div class="flex items-center border-b border-blue-200 pb-1">
+          <span class="text-[15px] text-blue-600 w-32 font-bold uppercase">អតិថិជន/Name:</span>
+          <input type="text" class="text-[15px] font-bold text-slate-800 input-edit w-full" />
+        </div>
+        <div class="flex items-center border-b border-blue-200 pb-1">
+          <span class="text-[15px] text-blue-600 w-32 font-bold uppercase">ទូរស័ព្ទ/Tel:</span>
+          <input type="text" class="text-[15px] text-slate-700 input-edit w-full" />
+        </div>
+        <div class="flex items-center border-b border-blue-200 pb-1">
+          <span class="text-[15px] text-blue-600 w-32 font-bold uppercase">ទីតាំង/Address:</span>
+          <input type="text" class="text-[15px] text-slate-700 input-edit w-full" />
+        </div>
+      </div>
+    </div>
 
-      function autoResize(textarea) {
-        textarea.style.height = "auto";
-        textarea.style.height = textarea.scrollHeight + "px";
+    <div class="flex-grow overflow-hidden mt-[-20px]">
+      <table class="w-full border-collapse border border-slate-200">
+        <thead>
+          <tr class="table-header text-[11px] font-bold uppercase">
+            <th class="py-3 px-2 text-center border-r border-white/20 w-10">
+              ល.រ<br />No
+            </th>
+            <th class="py-2 px-3 text-center border-r border-white/20">
+              រាយមុខទំនិញ<br />Name of Goods
+            </th>
+            <th class="py-3 px-2 text-center border-r border-white/20 w-24">
+              ការធានា<br />Warranty
+            </th>
+            <th class="py-3 px-2 text-center border-r border-white/20 w-16">
+              ចំនួន<br />Quanity
+            </th>
+            <th class="py-3 px-3 text-center border-r border-white/20 w-28">
+              តម្លៃរាយ<br />Unit Price
+            </th>
+            <th class="py-3 px-3 text-right w-32">តម្លៃសរុប<br />Total</th>
+          </tr>
+        </thead>
+        <tbody id="item-list"></tbody>
+      </table>
+    </div>
+
+    <div class="mt-2">
+      <div class="flex justify-between gap-6 items-start mb-10 relative top-[17px]">
+        <div class="w-[60%] p-3 bg-slate-50 rounded-xl border border-slate-200 border-dashed">
+          <h4 class="text-[17px] font-bold text-blue-900 uppercase mb-2">
+            សម្គាល់ និង​ ការធានា / TERMS & WARRANTY
+          </h4>
+          <ul class="text-[15px] text-slate-600 space-y-1 leading-tight">
+            <li>
+              • រាល់ទំនិញដែលអតិថិជនទិញរួចមិនអាចប្តូរយកសាច់ប្រាក់ឬដូរវិញបានឡើយ
+              / No Refund.
+            </li>
+            <li>
+              • សូមអតិថិជនត្រួតពិនិត្យទំនិញអោយបានច្បាស់លាស់មុនចាកចេញ / Please
+              check before leaving.
+            </li>
+            <li class="font-bold text-slate-800">
+              • មិនធានាលើទំនិញដែលបាត់បង់លក្ខណៈដើម ឆេះ ធ្លាក់ បាក់បែក
+              និងចូលទឹក។
+            </li>
+            <li>
+              • ការបាត់បង់ឬរហែក Seal ធានារបស់ហាង
+              និងបាត់វិកយបត្រមិនមានការធានាឡើយ។
+            </li>
+          </ul>
+        </div>
+
+        <div class="w-[35%] space-y-2">
+          <div class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[17px] rounded-xl">
+            <span class="font-bold text-black relative left-[-2px]">សរុប / TOTAL :</span>
+            <input type="text" id="subtotal"
+              class="w-[95px] text-blue-600 text-black outline-none border-none px-1 font-bold text-right" />
+          </div>
+          <div class="flex justify-between px-3 py-1.5 border-b border-slate-100 text-[15px]">
+            <span class="font-bold text-black">កក់ / DEPOSIT :</span>
+            <input type="text" id="deposit" oninput="calculateGrandTotal()"
+              class="input-edit font-extrabold w-[80px] text-blue-600 text-right" />
+          </div>
+          <div class="flex justify-between items-center px-3 py-3 text-black">
+            <span class="text-[15px] font-bold uppercase">នៅខ្វះ / BALANCE :</span>
+            <input type="text" id="balance" class="w-[95px] outline-none border-none font-bold text-black text-right" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center px-10 mb-4">
+        <div class="text-center w-40">
+          <p class="kh-moul text-[11px] text-blue-900 relative top-[10px]">អតិថិជន</p>
+          <p class="font-bold text-[10px] relative top-[10px]">Customer's Signature</p>
+          <div class="mt-[119px] border-b border-slate-200 relative top-[-20px]"></div>
+        </div>
+        <div class="text-center w-40 flex flex-col items-center">
+          <p class="kh-moul text-[11px] text-blue-900">អ្នកលក់</p>
+          <p class="font-bold text-[10px] mb-2">Seller's Signature</p>
+
+          <div class="relative group cursor-pointer w-full flex justify-center items-end min-h-[100px] top-[-10px]"
+            onclick="document.getElementById('photo-upload').click()">
+
+            <div id="upload-placeholder"
+              class="no-print absolute inset-0 flex items-center justify-center rounded-lg">
+              <span class="text-[9px] text-slate-400">+ ថែមហត្ថលេខា</span>
+            </div>
+
+            <div id="photo-preview" class="z-10 w-full h-full flex justify-center items-center relative top-[-18px]">
+            </div>
+
+            <input type="file" id="photo-upload" class="hidden w-[150px]" accept="image/*"
+              onchange="previewImage(this)">
+          </div>
+
+          <div class="w-full border-b border-slate-300 mt-1 relative top-[-20px]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let isTextInput = false;
+
+    function autoResize(textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
+    }
+
+    function toggleDateInput() {
+      const container = document.getElementById("date-container");
+      isTextInput = !isTextInput;
+      if (isTextInput) {
+        container.innerHTML = `<span class="font-bold text-slate-500">Date:</span><input type="text" id="date-field" class="font-bold text-slate-800 input-edit w-[160px] text-center" />`;
+      } else {
+        container.innerHTML = `<span class="font-bold text-slate-500">Date:</span><input type="date" id="date-field" class="font-bold text-slate-800 input-edit w-40 text-center" />`;
+        setInitialDate();
       }
+    }
 
-      function toggleDateInput() {
-        const container = document.getElementById("date-container");
-        isTextInput = !isTextInput;
-        if (isTextInput) {
-          container.innerHTML = `<span class="font-bold text-slate-500">Date:</span><input type="text" id="date-field" class="font-bold text-slate-800 input-edit w-[160px] text-center" />`;
-        } else {
-          container.innerHTML = `<span class="font-bold text-slate-500">Date:</span><input type="date" id="date-field" class="font-bold text-slate-800 input-edit w-40 text-center" />`;
-          setInitialDate();
-        }
+    function setInitialDate() {
+      const dateField = document.getElementById("date-field");
+      if (
+        dateField &&
+        (dateField.type === "date" || dateField.tagName === "INPUT")
+      ) {
+        const now = new Date().toISOString().split("T")[0];
+        if (dateField.type === "date") dateField.value = now;
       }
+    }
 
-      function setInitialDate() {
-        const dateField = document.getElementById("date-field");
-        if (
-          dateField &&
-          (dateField.type === "date" || dateField.tagName === "INPUT")
-        ) {
-          const now = new Date().toISOString().split("T")[0];
-          if (dateField.type === "date") dateField.value = now;
-        }
-      }
-
-      function addRow() {
-        const tbody = document.getElementById("item-list");
-        const rowCount = tbody.rows.length + 1;
-        const row = document.createElement("tr");
-        row.className = "item-row border-b border-slate-200";
-        row.innerHTML = `
+    function addRow() {
+      const tbody = document.getElementById("item-list");
+      const rowCount = tbody.rows.length + 1;
+      const row = document.createElement("tr");
+      row.className = "item-row border-b border-slate-200";
+      row.innerHTML = `
           <td class="py-2 px-1  text-center text-slate-500 text-xs border">${rowCount}</td>
           <td class="py-2 px-2 border">
             <textarea rows="1" oninput="autoResize(this)" class="textarea-auto input-edit text-sm w-full font-semibold text-slate-700"></textarea>
@@ -446,113 +414,130 @@
             </div>
           </td>
         `;
-        tbody.appendChild(row);
+      tbody.appendChild(row);
+    }
+
+    // មុខងារបន្ថែមនៅពេលចុច Enter ក្នុង Textarea
+    document.addEventListener("keydown", function (e) {
+      if (e.target.classList.contains("textarea-auto") && e.key === "Enter") {
+        const row = e.target.closest("tr");
+
+        // បន្ថែម Input ក្នុង Warranty, Qty, Price
+        const containers = row.querySelectorAll(".column-container");
+        containers.forEach((container) => {
+          const firstInput = container.querySelector("input");
+          const newInput = document.createElement("input");
+          newInput.className = firstInput.className;
+          newInput.type = firstInput.type;
+          if (
+            container.dataset.type === "qty" ||
+            container.dataset.type === "price"
+          ) {
+            newInput.oninput = function () {
+              updateRowTotal(this);
+            };
+          }
+          container.appendChild(newInput);
+        });
+
+        // បន្ថែម Input ក្នុង Total
+        const totalContainer = row.querySelector(".total-container");
+        const firstTotal = totalContainer.querySelector("input");
+        const newTotal = document.createElement("input");
+        newTotal.className = firstTotal.className;
+        newTotal.type = "number";
+        newTotal.readOnly = true;
+        totalContainer.querySelector(".flex").appendChild(newTotal);
+
+        setTimeout(() => autoResize(e.target), 10);
       }
+    });
 
-      // មុខងារបន្ថែមនៅពេលចុច Enter ក្នុង Textarea
-      document.addEventListener("keydown", function (e) {
-        if (e.target.classList.contains("textarea-auto") && e.key === "Enter") {
-          const row = e.target.closest("tr");
+    function updateRowTotal(input) {
+      const row = input.closest("tr");
+      const qtys = row.querySelectorAll(".qty");
+      const prices = row.querySelectorAll(".price");
+      const totals = row.querySelectorAll(".total-row-input");
 
-          // បន្ថែម Input ក្នុង Warranty, Qty, Price
-          const containers = row.querySelectorAll(".column-container");
-          containers.forEach((container) => {
-            const firstInput = container.querySelector("input");
-            const newInput = document.createElement("input");
-            newInput.className = firstInput.className;
-            newInput.type = firstInput.type;
-            if (
-              container.dataset.type === "qty" ||
-              container.dataset.type === "price"
-            ) {
-              newInput.oninput = function () {
-                updateRowTotal(this);
-              };
-            }
-            container.appendChild(newInput);
-          });
-
-          // បន្ថែម Input ក្នុង Total
-          const totalContainer = row.querySelector(".total-container");
-          const firstTotal = totalContainer.querySelector("input");
-          const newTotal = document.createElement("input");
-          newTotal.className = firstTotal.className;
-          newTotal.type = "number";
-          newTotal.readOnly = true;
-          totalContainer.querySelector(".flex").appendChild(newTotal);
-
-          setTimeout(() => autoResize(e.target), 10);
+      qtys.forEach((qtyInput, index) => {
+        const q = parseFloat(qtyInput.value) || 0;
+        const p = parseFloat(prices[index].value) || 0;
+        if (q > 0 && p > 0) {
+          totals[index].value = (q * p).toFixed(2);
+        } else {
+          totals[index].value = "";
         }
       });
+      calculateGrandTotal();
+    }
 
-      function updateRowTotal(input) {
-        const row = input.closest("tr");
-        const qtys = row.querySelectorAll(".qty");
-        const prices = row.querySelectorAll(".price");
-        const totals = row.querySelectorAll(".total-row-input");
+    function calculateGrandTotal() {
+      let subtotal = 0;
+      document.querySelectorAll(".total-row-input").forEach((input) => {
+        subtotal += parseFloat(input.value) || 0;
+      });
 
-        qtys.forEach((qtyInput, index) => {
-          const q = parseFloat(qtyInput.value) || 0;
-          const p = parseFloat(prices[index].value) || 0;
-          if (q > 0 && p > 0) {
-            totals[index].value = (q * p).toFixed(2);
-          } else {
-            totals[index].value = "";
-          }
-        });
+      const deposit =
+        parseFloat(document.getElementById("deposit").value) || 0;
+      const balance = subtotal - deposit;
+
+      document.getElementById("subtotal").value =
+        subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
+      document.getElementById("balance").value =
+        balance !== 0 ? "$" + balance.toFixed(2) : "";
+    }
+
+    function removeLastRow() {
+      const tbody = document.getElementById("item-list");
+      if (tbody.rows.length > 0) {
+        tbody.deleteRow(tbody.rows.length - 1);
         calculateGrandTotal();
       }
+    }
 
-      function calculateGrandTotal() {
-        let subtotal = 0;
-        document.querySelectorAll(".total-row-input").forEach((input) => {
-          subtotal += parseFloat(input.value) || 0;
-        });
-
-        const deposit =
-          parseFloat(document.getElementById("deposit").value) || 0;
-        const balance = subtotal - deposit;
-
-        document.getElementById("subtotal").value =
-          subtotal > 0 ? "$" + subtotal.toFixed(2) : "";
-        document.getElementById("balance").value =
-          balance !== 0 ? "$" + balance.toFixed(2) : "";
+    function clearAllRows() {
+      const tbody = document.getElementById("item-list");
+      if (
+        tbody.rows.length > 0 &&
+        confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")
+      ) {
+        tbody.innerHTML = "";
+        addRow();
+        document.getElementById("deposit").value = "";
+        calculateGrandTotal();
       }
+    }
 
-      function removeLastRow() {
-        const tbody = document.getElementById("item-list");
-        if (tbody.rows.length > 0) {
-          tbody.deleteRow(tbody.rows.length - 1);
-          calculateGrandTotal();
+    function addRows(count) {
+      for (let i = 0; i < count; i++) addRow();
+    }
+
+    function saveAsPDF() {
+      window.print();
+    }
+
+    window.onload = () => {
+      setInitialDate();
+      addRows(1);
+    };
+    function previewImage(input) {
+      const preview = document.getElementById('photo-preview');
+      const placeholder = document.getElementById('upload-placeholder');
+      const file = input.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          // បញ្ចូលរូបភាព និងកំណត់ទំហំឱ្យស្អាត
+          preview.innerHTML = `<img src="${e.target.result}" class="max-h-[100px] w-auto object-contain mb-[-10px]" />`;
+
+          // លាក់ Placeholder ពណ៌ប្រផេះចេញ
+          if (placeholder) placeholder.style.display = 'none';
         }
+        reader.readAsDataURL(file);
       }
+    }
+  </script>
+</body>
 
-      function clearAllRows() {
-        const tbody = document.getElementById("item-list");
-        if (
-          tbody.rows.length > 0 &&
-          confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")
-        ) {
-          tbody.innerHTML = "";
-          addRow();
-          document.getElementById("deposit").value = "";
-          calculateGrandTotal();
-        }
-      }
-
-      function addRows(count) {
-        for (let i = 0; i < count; i++) addRow();
-      }
-
-      function saveAsPDF() {
-        window.print();
-      }
-
-      window.onload = () => {
-        setInitialDate();
-        addRows(1);
-      };
-    </script>
-  </body>
 </html>
-
