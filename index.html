@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="./cdcicon.png" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CDC Computer - Invoice System</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -155,7 +156,10 @@
 </head>
 
 <body class="py-10">
-  <div class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl px-4 ">
+  <button
+    class="sm:hidden block fixed top-5 left-5 z-50 bg-white/90 backdrop-blur-md p-3 px-4 rounded-2xl shadow-xl border border-slate-200"
+    onclick="toggleSidebar()"><i class="ri-menu-line text-lg"></i></button>
+  <div class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl px-4 hidden sm:block">
     <div
       class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between gap-2 w-full">
       <div class="flex items-center gap-2">
@@ -192,7 +196,51 @@
           រក្សាទុកជា PDF
         </button>
         <button id="toggle-sig-btn" onclick="quickSignature()"
-          class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100">
+          class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100 py-3">
+          ថែមហត្ថលេខា
+        </button>
+      </div>
+    </div>
+  </div>
+  <!--navbar -->
+  <div class="no-print fixed top-5 left-64 -translate-x-1/2 z-10 flex sm:hidden w-[350px] hidden" id="sidebar">
+    <div
+      class="bg-white/90 backdrop-blur-md p-2 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between gap-2 w-full flex-col py-3">
+      <div class="flex items-center gap-2 flex-col w-full">
+        <a href="invoice.html"
+          class="text-blue-700 font-bold p-2 hover:bg-blue-50 rounded-xl transition-all w-full text-center">វិក្កយបត្រថ្មី</a>
+        <button onclick="removeLastRow()"
+          class="text-orange-600 font-bold p-2 hover:bg-orange-50 rounded-xl transition-all w-full">
+          លុបជួរចុងក្រោយ
+        </button>
+        <button onclick="clearAllRows()" class="text-red-700 font-bold p-2 hover:bg-red-50 rounded-xl transition-all w-full py-3">
+          លុបទាំងអស់
+        </button>
+      </div>
+
+      <div class="flex gap-2 items-center flex-col w-full">
+        <button onclick="addRows(6)"
+          class="text-blue-700 text-sm font-bold p-1 py-2 px-3 hover:bg-blue-50 rounded-xl transition-all border border-blue-100 w-full text-center py-3">
+          បន្ថែម 6 ជួរ
+        </button>
+        <button onclick="addRow()"
+          class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100 w-full text-center py-3">
+          ថែម 1 ជួរ
+        </button>
+        <button onclick="toggleDateInput()"
+          class="px-3 py-2 text-sm font-bold text-purple-700 hover:bg-purple-50 rounded-xl transition-all border border-purple-100 w-full text-center py-3">
+          ប្តូរទម្រង់ថ្ងៃ (Date/Text)
+        </button>
+        <button onclick="saveAsPDF()"
+          class="px-5 py-2 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 w-full py-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          រក្សាទុកជា PDF
+        </button>
+        <button id="toggle-sig-btn" onclick="quickSignature()"
+          class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100 w-full text-center py-3">
           ថែមហត្ថលេខា
         </button>
       </div>
@@ -564,6 +612,10 @@
         btn.classList.replace('text-red-600', 'text-blue-700');
         isSigOn = false;
       }
+    }
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('hidden');
     }
   </script>
 </body>
