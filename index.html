@@ -155,9 +155,9 @@
 </head>
 
 <body class="py-10">
-  <div class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+  <div class="no-print fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl px-4 ">
     <div
-      class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between">
+      class="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-slate-200 flex items-center justify-between gap-2 w-full">
       <div class="flex items-center gap-2">
         <a href="invoice.html"
           class="text-blue-700 font-bold p-2 hover:bg-blue-50 rounded-xl transition-all">វិក្កយបត្រថ្មី</a>
@@ -190,6 +190,10 @@
               d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
           រក្សាទុកជា PDF
+        </button>
+        <button id="toggle-sig-btn" onclick="quickSignature()"
+          class="px-3 py-2 text-sm font-bold text-blue-700 hover:bg-blue-50 rounded-xl transition-all border border-blue-100">
+          ថែមហត្ថលេខា
         </button>
       </div>
     </div>
@@ -340,7 +344,7 @@
             onclick="document.getElementById('photo-upload').click()">
 
             <div id="upload-placeholder" class="no-print absolute inset-0 flex items-center justify-center rounded-lg">
-              <span class="text-[9px] text-slate-400">+ ថែមហត្ថលេខា</span>
+              <span class="text-[9px] text-slate-400"></span>
             </div>
 
             <div id="photo-preview" class="z-10 w-full h-full flex justify-center items-center relative top-[-18px]">
@@ -534,6 +538,31 @@
           if (placeholder) placeholder.style.display = 'none';
         }
         reader.readAsDataURL(file);
+      }
+    }
+    let isSigOn = false;
+
+    function quickSignature() {
+      const preview = document.getElementById('photo-preview');
+      const placeholder = document.getElementById('upload-placeholder');
+      const btn = document.getElementById('toggle-sig-btn');
+
+      const signatureSource = "singcdc.png";
+
+      if (!isSigOn) {
+        preview.innerHTML = `<img src="${signatureSource}" class="max-h-[100px] w-auto object-contain mb-[-10px] mix-blend-multiply" />`;
+        if (placeholder) placeholder.style.display = 'none';
+
+        btn.innerText = "ដកហត្ថលេខា";
+        btn.classList.replace('text-blue-700', 'text-red-600');
+        isSigOn = true;
+      } else {
+        preview.innerHTML = "";
+        if (placeholder) placeholder.style.display = 'flex';
+
+        btn.innerText = "ថែមហត្ថលេខា";
+        btn.classList.replace('text-red-600', 'text-blue-700');
+        isSigOn = false;
       }
     }
   </script>
